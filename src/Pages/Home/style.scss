@@ -1,0 +1,35 @@
+.home {
+    display: flex;
+    flex-direction: column;
+
+    height: 100%;
+    width: 100%;
+    
+    .speed-cubing {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+
+        .scramble {
+            font-size: 40px;
+            text-align: center;
+            font-weight: bold;
+            letter-spacing: 7px;
+        }
+
+        .cube-scramble-check {
+            margin: auto;
+            height: 300px;
+
+            img {
+                height: 100%;
+            }
+        }
+
+        .timer {
+            font-size: 80px;
+            text-align: center;
+        }
+    }
+}
