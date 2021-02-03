@@ -1,4 +1,4 @@
-import { TimeDB } from "../definitions"
+import { ExerciseData } from "../definitions"
 
 import Store from 'electron-store';
 
@@ -16,19 +16,17 @@ class Database {
     }
 }
 
-class TimeDatabase extends Database {
+class ExerciseDB {
 
-    setTimes(data: TimeDB[]){
-        this.setElement('times', data)
+    getExerciseList(){
+        return require('./exercise.json') as ExerciseData[]
     }
 
-    getTimes(){
-        return this.getElement('times', []) as TimeDB[]
+    getExercise(id: number){
+        return this.getExerciseList().find(e => e.id === id)
     }
 
-    getLastTimes(nb = 5){
-        return this.getTimes().sort((a, b) => b.timestamp - a.timestamp).slice(0, nb)
-    }
 }
 
-export const timeDB = new TimeDatabase()
+export const db = new Database()
+export const exerciseDB = new ExerciseDB()

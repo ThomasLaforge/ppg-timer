@@ -7,14 +7,15 @@ import {
 } from "react-router-dom";
 
 import Home from './Pages/Home/index'
+import Creator from './Pages/Creator/index'
 
 function App() {
   return (
     <Router>
         <Switch>
-          {/* <Route path="/about">
-            <About />
-          </Route> */}
+          <Route path="/creator">
+            <Creator />
+          </Route>
           <Route path="/">
             <Home />
           </Route>
