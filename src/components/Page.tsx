@@ -1,7 +1,7 @@
 import React, { ReactElement } from "react";
 
 interface PageProps {
-    children: ReactElement
+    children?: ReactElement
     title: string
 }
 

@@ -5,7 +5,8 @@ export interface ExerciseData {
     id: number,
     img: string, // url/src format
     defaultRepetions?: number,
-    defaultDuration?: number // in sec
+    defaultDuration?: number, // in sec
+    describtion?: number
 }
 
 export interface ExerciseConfigured {
@@ -26,5 +27,6 @@ export interface LoopConfigured extends Loop {
     song?: string // url song
 }
 export interface Training {
-    loops: LoopConfigured[]
+    loops: LoopConfigured[],
+    note?: number
 }
