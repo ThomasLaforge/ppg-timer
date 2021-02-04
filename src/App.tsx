@@ -32,12 +32,12 @@ const [drawerOpen, setdrawerOpen] = React.useState(false)
 
       <Drawer anchor={'left'} open={drawerOpen} onClose={() => setdrawerOpen(false)}>
         <List>
-          <ListItem button key={0}>
-            <Link to='/creator'>Creator</Link>
-          </ListItem>
-          
           <ListItem button key={1}>
             <Link to='/'>Home</Link>
+          </ListItem>
+
+          <ListItem button key={0}>
+            <Link to='/creator'>Creator</Link>
           </ListItem>
         </List>
       </Drawer>

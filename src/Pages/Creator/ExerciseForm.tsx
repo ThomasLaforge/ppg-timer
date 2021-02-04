@@ -40,6 +40,7 @@ export default function ExerciseForm(props: ExerciseFormProps){
                                 id="exercise-duration"
                                 label="Exercise duration"
                                 type="number"
+                                InputProps={{inputProps: { min: 0 }}}
                                 fullWidth
                                 onChange={(e) => setDuration(parseInt(e.target.value))}
                                 value={duration} 
@@ -48,6 +49,7 @@ export default function ExerciseForm(props: ExerciseFormProps){
                                 id="exercise-repetitions"
                                 label="Exercise reps"
                                 type="number"
+                                InputProps={{inputProps: { min: 0 }}}
                                 fullWidth
                                 onChange={(e) => setRepetition(parseInt(e.target.value))}
                                 value={repetition} 
@@ -60,6 +62,7 @@ export default function ExerciseForm(props: ExerciseFormProps){
                             id="exercise-rest"
                             label="Exercise rest time"
                             type="number"
+                            InputProps={{inputProps: { min: 0 }}}
                             fullWidth
                             value={rest}
                             onChange={(e) => setRest(parseInt(e.target.value))}

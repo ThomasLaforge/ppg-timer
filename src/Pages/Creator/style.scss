@@ -23,8 +23,16 @@
             @include creator_titles;
         }
 
-        .creator-global-settings-input {
+        .creator-global-settings-input-list {
             @include creator_box_inputs;
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+
+            .creator-global-settings-input {
+                width:1/4*100%;
+                padding: 15px;
+            }
         }
     }
 
