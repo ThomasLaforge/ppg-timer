@@ -1,7 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit&family=Lobster&display=swap');
 .home {
-    display: flex;
-    flex-direction: column;
+    .app-title {
+        font-family: Kanit;
+        font-size: 75px;
+        font-weight: bold;
+        text-align: center;
+    }
 
-    height: 100%;
-    width: 100%;
+    .import-module {
+        margin: 40px 0;
+    
+        .import-module-paper {
+            padding: 20px 20px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+
+            .import-module-input {
+                width: 70%;
+            }
+
+            .import-module-btn {
+                width: 20%;
+            }
+        }
+
+    }
+
 }
