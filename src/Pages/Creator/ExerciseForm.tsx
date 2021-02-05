@@ -1,15 +1,16 @@
 import { Button, ButtonGroup, Paper, TextField } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { exerciseDB } from "../../database/index";
 import ExerciseSelector from "./ExerciseSelector";
 
 interface ExerciseFormProps {
-    id: number
+    id: string // as '{loopIndex}-{exerciseIndexInLoop}
 }
 
 export default function ExerciseForm(props: ExerciseFormProps){
     const {id} = props
-    const exerciseData = exerciseDB.getExercise(id)
+    const [loopIndex, exerciseIndex] = id.split('-')
+    const exerciseData = exerciseDB.getExercise(0)
     const [rest, setRest] = useState(30)
     const [duration, setDuration] = useState(30)
     const [repetition, setRepetition] = useState(10)
@@ -42,8 +43,8 @@ export default function ExerciseForm(props: ExerciseFormProps){
                                 type="number"
                                 InputProps={{inputProps: { min: 0 }}}
                                 fullWidth
+                                value={duration.toString()} 
                                 onChange={(e) => setDuration(parseInt(e.target.value))}
-                                value={duration} 
                             />
                             : <TextField 
                                 id="exercise-repetitions"
@@ -51,8 +52,8 @@ export default function ExerciseForm(props: ExerciseFormProps){
                                 type="number"
                                 InputProps={{inputProps: { min: 0 }}}
                                 fullWidth
+                                value={repetition.toString()} 
                                 onChange={(e) => setRepetition(parseInt(e.target.value))}
-                                value={repetition} 
                             />
                         }
                     </div>
@@ -64,8 +65,10 @@ export default function ExerciseForm(props: ExerciseFormProps){
                             type="number"
                             InputProps={{inputProps: { min: 0 }}}
                             fullWidth
-                            value={rest}
-                            onChange={(e) => setRest(parseInt(e.target.value))}
+                            value={rest.toString()}
+                            onChange={(e) => {
+                                setRest(parseInt(e.target.value))
+                            }}
                         />
                     </div>
                 </div>

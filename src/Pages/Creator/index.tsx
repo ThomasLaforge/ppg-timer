@@ -1,32 +1,25 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { useReducer, useState } from "react";
 import LoopForm from "./LoopForm";
 import Page from "../../components/Page";
 import { TextField, Button, Paper } from "@material-ui/core";
 import { DEFAULT_EXERCISE_DURATION, DEFAULT_EXERCISE_REPETITIONS, DEFAULT_EXERCISE_REST_TIME } from "../../definitions";
 
-interface CreatorData {
-    defaultDuration: number,
-    defaultRepetions: number,
-}
-
-export const CreatorContext = createContext([])
-
 import './style.scss'
+import { DEFAULT_CREATOR_DATA, reducer, CreatorDispatchActionType } from "./reducer";
 
 export default function Creator(){
-    const [creatorData, updateCreatorData] = useState('toto')
-    const [nbLoops, setNbLoops] = useState(1)
-    const [defaultDuration, setDefaultDuration] = useState(DEFAULT_EXERCISE_DURATION)
-    const [defaultRepetions, setDefaultRepetions] = useState(DEFAULT_EXERCISE_REPETITIONS)
-    const [defaultRest, setDefaultRest] = useState(DEFAULT_EXERCISE_REST_TIME)
-
+    const [state, dispatch] = useReducer(reducer, DEFAULT_CREATOR_DATA)
+    const {
+        nbLoops,
+        defaultExerciseDuration,
+        defaultExerciseRepetions,
+        defaultExerciseRest
+    } = state
+    
     const renderLoopForms  = () => {
         return <div className="loop-list">
             {new Array(nbLoops).fill('').map( (_, loopIndex) =>
-                <LoopForm 
-                    index={loopIndex} 
-                    key={loopIndex}
-                />
+                <LoopForm key={loopIndex} index={loopIndex} />
             )}   
         </div>
     }
@@ -35,8 +28,7 @@ export default function Creator(){
         console.log('training')
     }
 
-    return <CreatorContext.Provider value={[creatorData, updateCreatorData]}>
-    <Page title="creator">
+    return <Page title="creator">
         <React.Fragment>
             <Paper className='creator-global-settings'>
                 <div className="creator-global-settings-title">
@@ -51,12 +43,15 @@ export default function Creator(){
                             type="number"
                             InputProps={{inputProps: { min: 1 }}}
                             fullWidth
-                            value={nbLoops}
+                            value={nbLoops.toString()}
                             onChange={(e) => {    
                                 if(e.target.value && e.target.value.length > 0){
                                     const intValue = parseInt(e.target.value)
                                     if(!!intValue && intValue > 0){
-                                        setNbLoops(parseInt(e.target.value))
+                                        dispatch({
+                                            type: CreatorDispatchActionType.UpdateNbLoop,
+                                            value: parseInt(e.target.value)
+                                        })
                                     }
                                 }
                             }}
@@ -69,8 +64,11 @@ export default function Creator(){
                             type="number"
                             InputProps={{inputProps: { min: 0 }}}
                             fullWidth
-                            value={defaultDuration}
-                            onChange={(e) => setDefaultDuration(parseInt(e.target.value))}
+                            value={defaultExerciseDuration.toString()}
+                            onChange={(e) => dispatch({
+                                type: CreatorDispatchActionType.UpdateDefaultExerciseDuration,
+                                value: parseInt(e.target.value)
+                            })}
                         />    
                     </div>
                     <div className="creator-global-settings-input">
@@ -80,8 +78,11 @@ export default function Creator(){
                             type="number"
                             InputProps={{inputProps: { min: 0 }}}
                             fullWidth
-                            value={defaultRepetions}
-                            onChange={(e) => setDefaultRepetions(parseInt(e.target.value))}
+                            value={defaultExerciseRepetions.toString()}
+                            onChange={(e) => dispatch({
+                                type: CreatorDispatchActionType.UpdateDefaultExerciseRepetions,
+                                value: parseInt(e.target.value)
+                            })}
                         />    
                     </div>
                     <div className="creator-global-settings-input">
@@ -91,8 +92,11 @@ export default function Creator(){
                             type="number"
                             InputProps={{inputProps: { min: 0 }}}
                             fullWidth
-                            value={defaultRest}
-                            onChange={(e) => setDefaultRest(parseInt(e.target.value))}
+                            value={defaultExerciseRest.toString()}
+                            onChange={(e) => dispatch({
+                                type: CreatorDispatchActionType.UpdateDefaultExerciseRest,
+                                value: parseInt(e.target.value)
+                            })}
                         />    
                     </div>
                 </div>
@@ -108,5 +112,4 @@ export default function Creator(){
             >Save Training</Button>
         </React.Fragment>
     </Page>
-</CreatorContext.Provider>    
 }

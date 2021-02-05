@@ -13,7 +13,7 @@ export default function ExerciseSelector(){
         onChange={(e) => setExerciseId(e.target.value as number)}
     >
         {exerciceList.map( (e, k) => {
-            return <MenuItem key={k} value={e.id}>{e.name}</MenuItem>
+            return <MenuItem key={k} value={k}>{e.name}</MenuItem>
         })}
     </Select>
 }
