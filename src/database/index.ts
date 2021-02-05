@@ -23,7 +23,7 @@ class ExerciseDB {
     }
 
     getExercise(id: number){
-        return this.getExerciseList().find(e => e.id === id)
+        return this.getExerciseList()[id]
     }
 
 }
