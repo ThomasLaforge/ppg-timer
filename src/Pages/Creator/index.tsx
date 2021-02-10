@@ -1,20 +1,42 @@
-import React, { useReducer, useState } from "react";
+import React, { useReducer } from "react";
 import LoopForm from "./LoopForm";
 import Page from "../../components/Page";
 import { TextField, Button, Paper } from "@material-ui/core";
-import { DEFAULT_EXERCISE_DURATION, DEFAULT_EXERCISE_REPETITIONS, DEFAULT_EXERCISE_REST_TIME } from "../../definitions";
+import { TrainingData } from "../../definitions";
 
 import './style.scss'
 import { DEFAULT_CREATOR_DATA, reducer, CreatorDispatchActionType } from "./reducer";
+import { trainingsDB } from "../../database";
+import { useHistory, useRouteMatch } from "react-router-dom";
+import { MD5 } from "crypto-js";
+import { trainingsAPI } from "../../App";
 
-export default function Creator(){
-    const [state, dispatch] = useReducer(reducer, DEFAULT_CREATOR_DATA)
+export const CreatorContext = React.createContext(null);
+export interface CreateRouteParams {
+    trainingIndex?: number
+}
+
+export default function Creator(props: any){
+    let initialState = DEFAULT_CREATOR_DATA
+    const match = useRouteMatch("/creator/:trainingIndex");
+    
+    const params: CreateRouteParams = match?.params 
+    const trainingIndex = params?.trainingIndex
+    const updateMode = trainingIndex >= 0
+    if(updateMode){
+        const training = trainingsDB.get(trainingIndex)
+        initialState = training.data
+    }
+
+    const [state, dispatch] = useReducer(reducer, initialState)
     const {
-        nbLoops,
         defaultExerciseDuration,
         defaultExerciseRepetions,
-        defaultExerciseRest
+        defaultExerciseRest,
+        name
     } = state
+    const nbLoops = state.loops.length
+    const history = useHistory();
     
     const renderLoopForms  = () => {
         return <div className="loop-list">
@@ -25,14 +47,77 @@ export default function Creator(){
     }
 
     const saveTraining = () => {
-        console.log('training')
+        let index = updateMode ? trainingIndex : trainingsDB.count
+        completeTraining('/home')
+    }
+    
+    const startTraining = () => {
+        let index = updateMode ? trainingIndex : trainingsDB.count
+        completeTraining(`/executor/${index}`)
+    }
+    
+    const completeTraining = async (redirectionPath: string) => {
+        let training: TrainingData;
+        console.log('complete training', {path: redirectionPath});
+        
+        if(updateMode && JSON.stringify(trainingsDB.get(trainingIndex).data) === JSON.stringify(state)) {
+            history.push(redirectionPath)
+            console.log('complete training 1');
+        }
+        else {
+            if(updateMode){
+                console.log('complete training 2');
+                training = trainingsDB.update(trainingIndex, state)
+            }
+            else {
+                training = trainingsDB.create(state)
+            }
+    
+            console.log('complete training 3');
+
+            const trainingHash = MD5(JSON.stringify(state)).toString()
+            try{
+                const apiTrainingsWithHash = await trainingsAPI
+                    .where('hash', '==', trainingHash)
+                    .get()
+                if(apiTrainingsWithHash.docs.length < 1){
+                    console.log('complete training 5');
+
+                    trainingsAPI.add({
+                        hash: trainingHash,
+                        trainingData: JSON.stringify(state)
+                    })
+                }
+                history.push(redirectionPath)
+            }
+            catch(e){
+                // TODO: if not possible to reach api put work on localstorage / cache 
+                console.log('complete training 6');
+                history.push(redirectionPath)
+            }
+        }
     }
 
     return <Page title="creator">
-        <React.Fragment>
+        <CreatorContext.Provider value={{state, dispatch}}>
             <Paper className='creator-global-settings'>
                 <div className="creator-global-settings-title">
                     Global settings
+                </div>
+                <div className="creator-global-settings-name">
+                    <TextField
+                        id="loop-name"
+                        label="Name"
+                        type="string"
+                        fullWidth
+                        value={name}
+                        onChange={(e) => {    
+                            dispatch({
+                                type: CreatorDispatchActionType.UpdateName,
+                                value: e.target.value
+                            })
+                        }}
+                    />
                 </div>
 
                 <div className="creator-global-settings-input-list">
@@ -104,12 +189,21 @@ export default function Creator(){
             
             { renderLoopForms() }
 
-            <Button
-                className='save-training-btn'
-                variant="contained" 
-                color="primary"
-                onClick={saveTraining}
-            >Save Training</Button>
-        </React.Fragment>
+            <div className="end-creation-actions">
+                <Button
+                    className='save-training-btn'
+                    variant="contained" 
+                    color="primary"
+                    onClick={saveTraining}
+                >Save Training</Button>
+                
+                <Button
+                    className='start-training-btn'
+                    variant="contained" 
+                    color="secondary"
+                    onClick={startTraining}
+                >Start Training</Button>
+            </div>
+        </CreatorContext.Provider>
     </Page>
 }

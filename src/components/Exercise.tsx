@@ -1,6 +1,6 @@
 import React from "react";
-import { ExerciseData } from "../definitions";
-const exerciceList = require('../database/exercise.json') as ExerciseData[]
+import { ExerciseJsonData } from "../definitions";
+const exerciceList = require('../database/exercise.json') as ExerciseJsonData[]
 
 interface ExerciseProps {
     id: number,

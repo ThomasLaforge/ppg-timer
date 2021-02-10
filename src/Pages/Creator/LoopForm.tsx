@@ -1,21 +1,24 @@
 import { Paper, TextField } from "@material-ui/core";
-import React, { useReducer } from "react";
+import React, { useContext, useReducer } from "react";
 import ExerciseForm from "./ExerciseForm";
 import ExerciseSelector from "./ExerciseSelector";
-import { reducer, DEFAULT_CREATOR_DATA, CreatorDispatchActionType } from './reducer'
+import { CreatorDispatchActionType } from './reducer'
+import { CreatorContext } from './index'
 interface LoopFormProps {
     index: number
 }
 
 export default function LoopForm(props: LoopFormProps){
     const {index} = props
-    const [state, dispatch] = useReducer(reducer, DEFAULT_CREATOR_DATA)
+    const {state, dispatch} = useContext(CreatorContext)
+    
     const {
-        loopSize,
         repetitions,
         rest,
         warmup,
+        exercises
     } = state.loops[index]
+    const loopSize = exercises.length
     const name = `loop ${index + 1}`
 
     return <Paper className="loop-form">
@@ -28,7 +31,7 @@ export default function LoopForm(props: LoopFormProps){
                     id="loop-size"
                     label="Loop size"
                     type="number"
-                    InputProps={{inputProps: { min: 0 }}}
+                    InputProps={{inputProps: { min: 1 }}}
                     fullWidth
                     value={loopSize.toString()}
                     onChange={(e) => {
@@ -48,7 +51,7 @@ export default function LoopForm(props: LoopFormProps){
                     id="repetitions"
                     label="Repetitions"
                     type="number"
-                    InputProps={{inputProps: { min: 0 }}}
+                    InputProps={{inputProps: { min: 1 }}}
                     fullWidth
                     value={repetitions.toString()}
                     onChange={(e) => {
@@ -107,7 +110,9 @@ export default function LoopForm(props: LoopFormProps){
             {new Array(loopSize).fill('').map( (_, exerciseIndex) => {
                 const id = `${index}-${exerciseIndex}`
                 return <ExerciseForm 
-                    key={id} id={id}
+                    key={id} 
+                    loopIndex={index} 
+                    exerciseIndex={exerciseIndex}
                 />
             })}
         </div>

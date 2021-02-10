@@ -1,39 +1,61 @@
+import { exerciseDB } from "../../database";
 import { 
     DEFAULT_EXERCISE_REST_TIME,
     DEFAULT_EXERCISE_REPETITIONS,
     DEFAULT_EXERCISE_DURATION, 
     DEFAULT_LOOP_REST_TIME,
-    DEFAULT_LOOP_WARMUP
+    DEFAULT_LOOP_WARMUP,
+    DEFAULT_LOOP_SIZE,
+    DEFAULT_NB_LOOP
 } from "../../definitions";
 
-interface LoopData {
-    loopSize: number,
-    repetitions: number,
-    rest: number,
-    warmup: number
+export interface ExerciseData {
+    exerciseId: number,
+    isDuration: boolean, // True = duration Else = Repetition
+    value: number,
+    rest: number
 }
 
-interface CreatorData {
-    nbLoops: number,
+export interface LoopData {
+    repetitions: number,
+    rest: number,
+    warmup: number,
+    exercises: ExerciseData[]
+}
+
+export interface CreatorData {
     defaultExerciseDuration: number,
     defaultExerciseRepetions: number,
     defaultExerciseRest: number,
-    loops: LoopData[]
+    loops: LoopData[],
+    name: string
+}
+
+
+const DEFAULT_EXERCISE_DATA: ExerciseData = {
+    exerciseId: 0,
+    isDuration: !!exerciseDB.getExercise(0).defaultDuration, // True = duration Else = Repetition
+    value: exerciseDB.getExercise(0).defaultDuration || exerciseDB.getExercise(0).defaultRepetitions,
+    rest: DEFAULT_EXERCISE_REST_TIME
 }
 
 const DEFAULT_LOOP_DATA: LoopData = {
-    loopSize: 4,
     repetitions: 1,
     rest: DEFAULT_LOOP_REST_TIME,
     warmup: DEFAULT_LOOP_WARMUP,
+    exercises: new Array(DEFAULT_LOOP_SIZE)
+        .fill('')
+        .map( (_, i) => DEFAULT_EXERCISE_DATA)
 }
 
 export const DEFAULT_CREATOR_DATA: CreatorData = {
-    nbLoops: 1,
+    name: '',
     defaultExerciseDuration: DEFAULT_EXERCISE_DURATION,
     defaultExerciseRepetions: DEFAULT_EXERCISE_REPETITIONS,
     defaultExerciseRest: DEFAULT_EXERCISE_REST_TIME,
-    loops: [DEFAULT_LOOP_DATA]
+    loops: new Array(DEFAULT_NB_LOOP)
+        .fill('')
+        .map( (_, i) => DEFAULT_LOOP_DATA)
 }
 
 interface CreatorDispatch {
@@ -42,6 +64,7 @@ interface CreatorDispatch {
 }
 
 export enum CreatorDispatchActionType {
+    UpdateName,
     UpdateNbLoop,
     UpdateDefaultExerciseDuration,
     UpdateDefaultExerciseRepetions,
@@ -50,15 +73,24 @@ export enum CreatorDispatchActionType {
     UpdateLoopRepetitions,
     UpdateLoopRest,
     UpdateLoopWarmup,
+    UpdateExerciseIsDuration,
+    UpdateExerciseRest,
+    UpdateExerciseId,
+    UpdateExerciseValue,
+    // InitUpdatorState
 }
 
 export const initialState = 0;
 
 export const reducer = (state: CreatorData, action: CreatorDispatch) => {
   switch (action.type) {
-    // Global settings
+    // case CreatorDispatchActionType.InitUpdatorState:
+    //     return action.value
+    case CreatorDispatchActionType.UpdateName:
+        return {...state, name: action.value}
     case CreatorDispatchActionType.UpdateNbLoop:
-        let { loops, nbLoops } = state
+        let { loops } = state
+        const nbLoops = loops.length
         if(nbLoops > action.value){
             loops = loops.slice(0, action.value)
         }
@@ -67,7 +99,7 @@ export const reducer = (state: CreatorData, action: CreatorDispatch) => {
                 loops.push(DEFAULT_LOOP_DATA)
             }
         }
-        return {...state, nbLoops: action.value, loops}
+        return {...state, loops}
     case CreatorDispatchActionType.UpdateDefaultExerciseDuration:
         return {...state, defaultExerciseDuration: action.value}
     case CreatorDispatchActionType.UpdateDefaultExerciseRepetions:
@@ -77,8 +109,18 @@ export const reducer = (state: CreatorData, action: CreatorDispatch) => {
     // Loop settings
     case CreatorDispatchActionType.UpdateLoopSize:
         return {...state, loops: state.loops.map( (l, i) => {
-            if(i === action.value.loopIindex){
-                return {...l, loopSize: action.value.number}
+            if(i === action.value.loopIndex){
+                let { exercises } = l
+                const loopSize = exercises.length
+                if(loopSize > action.value.number){
+                    exercises = exercises.slice(0, action.value.number)
+                }
+                else {
+                    while(exercises.length < action.value.number){
+                        exercises.push(DEFAULT_EXERCISE_DATA)
+                    }
+                }
+                return {...l, loopSize: action.value.number, exercises}
             }
             else {
                 return l
@@ -86,8 +128,8 @@ export const reducer = (state: CreatorData, action: CreatorDispatch) => {
         })}
     case CreatorDispatchActionType.UpdateLoopRepetitions:
         return {...state, loops: state.loops.map( (l, i) => {
-            if(i === action.value.loopIindex){
-                return {...l, loopSize: action.value.number}
+            if(i === action.value.loopIndex){
+                return {...l, repetitions: action.value.number}
             }
             else {
                 return l
@@ -95,8 +137,8 @@ export const reducer = (state: CreatorData, action: CreatorDispatch) => {
         })}
     case CreatorDispatchActionType.UpdateLoopRest:
         return {...state, loops: state.loops.map( (l, i) => {
-            if(i === action.value.loopIindex){
-                return {...l, loopSize: action.value.number}
+            if(i === action.value.loopIndex){
+                return {...l, rest: action.value.number}
             }
             else {
                 return l
@@ -104,11 +146,87 @@ export const reducer = (state: CreatorData, action: CreatorDispatch) => {
         })}
     case CreatorDispatchActionType.UpdateLoopWarmup:
         return {...state, loops: state.loops.map( (l, i) => {
-            if(i === action.value.loopIindex){
-                return {...l, loopSize: action.value.number}
+            if(i === action.value.loopIndex){
+                return {...l, warmup: action.value.number}
             }
             else {
                 return l
+            }
+        })}
+    case CreatorDispatchActionType.UpdateExerciseIsDuration:
+        return {...state, loops: state.loops.map((l, i) => {
+            if(i !== action.value.loopIndex){
+                return l
+            }
+            else {
+                return {...l, exercises: l.exercises.map((e, j) => {
+                    if(j !== action.value.exerciseIndex){
+                        return e
+                    }
+                    else {
+                        return {...e, 
+                            isDuration: action.value.value,
+                            value: exerciseDB.getExercise(e.exerciseId)[
+                                action.value.value ? 'defaultDuration' : 'defaultRepetitions']
+                            ||  (action.value.value ? DEFAULT_EXERCISE_DURATION : DEFAULT_EXERCISE_REPETITIONS)
+                        }
+                    }
+                })}
+            }
+        })}
+    case CreatorDispatchActionType.UpdateExerciseRest:
+        return {...state, loops: state.loops.map((l, i) => {
+            if(i !== action.value.loopIndex){
+                return l
+            }
+            else {
+                return {...l, exercises: l.exercises.map((e, j) => {
+                    if(j !== action.value.exerciseIndex){
+                        return e
+                    }
+                    else {
+                        return {...e, rest: action.value.value}
+                    }
+                })}
+            }
+        })}
+    case CreatorDispatchActionType.UpdateExerciseId:
+        return {...state, loops: state.loops.map((l, i) => {
+            if(i !== action.value.loopIndex){
+                return l
+            }
+            else {
+                return {...l, exercises: l.exercises.map((e, j) => {
+                    if(j !== action.value.exerciseIndex){
+                        return e
+                    }
+                    else {
+                        const isDuration = !!exerciseDB.getExercise(action.value.value).defaultDuration
+                        return {...e, 
+                            exerciseId: action.value.value,
+                            isDuration,
+                            value: exerciseDB.getExercise(action.value.value)[
+                                isDuration ? 'defaultDuration' : 'defaultRepetitions']
+                            ||  (isDuration ? DEFAULT_EXERCISE_DURATION : DEFAULT_EXERCISE_REPETITIONS)
+                        }
+                    }
+                })}
+            }
+        })}
+    case CreatorDispatchActionType.UpdateExerciseValue:
+        return {...state, loops: state.loops.map((l, i) => {
+            if(i !== action.value.loopIndex){
+                return l
+            }
+            else {
+                return {...l, exercises: l.exercises.map((e, j) => {
+                    if(j !== action.value.exerciseIndex){
+                        return e
+                    }
+                    else {
+                        return {...e, value: action.value.value}
+                    }
+                })}
             }
         })}
     default: throw new Error('Unexpected action');
