@@ -23,6 +23,10 @@
             @include creator_titles;
         }
 
+        .creator-global-settings-name {
+            padding: 0 45px;
+        }
+
         .creator-global-settings-input-list {
             @include creator_box_inputs;
             display: flex;
@@ -99,9 +103,21 @@
         }
     }
 
-    .save-training-btn {
-        margin: 20px auto;
-        width: 300px;
+    .end-creation-actions {
+        display: flex;
+        flex-direction: row;
+        width: 70%;
+        justify-content: space-between;
+        margin: 30px auto;
+
+        .save-training-btn {
+            width: 300px;
+        }
+
+        .start-training-btn {
+            // background-color: #4dd04dde;
+            width: 300px;
+        }
     }
     
 }
