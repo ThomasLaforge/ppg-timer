@@ -10,12 +10,34 @@ import {
 
 import Home from './Pages/Home/index'
 import Creator from './Pages/Creator/index'
-import { IconButton, Toolbar, AppBar, Drawer, List, ListItem, ListItemText, Typography } from '@material-ui/core';
+import { IconButton, Toolbar, AppBar, Drawer, List, ListItem, ListItemText, Typography, ListItemIcon } from '@material-ui/core';
 
 import MenuIcon from '@material-ui/icons/Menu';
+import HomeIcon from '@material-ui/icons/Home';
+import Executor from './Pages/Executor';
+
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+
+if (firebase.apps.length === 0) {
+  firebase.initializeApp({
+    apiKey: "AIzaSyD1nWhY6OLe_JJo1vVFP9bScyPDTDwDKyQ",
+    authDomain: "ppg-timer-db.firebaseapp.com",
+    projectId: "ppg-timer-db"
+  });
+}
+
+const api = firebase.firestore();
+export const trainingsAPI = api.collection("trainings")
+// trainingsCollection.get().then((querySnapshot: any) => {
+//   querySnapshot.forEach((doc: any) => {
+//       console.log(doc.data());
+//   });
+// });
+
 
 function App() {
-const [drawerOpen, setdrawerOpen] = React.useState(false)
+  const [drawerOpen, setdrawerOpen] = React.useState(false)
 
   return (
     <HashRouter>
@@ -32,12 +54,17 @@ const [drawerOpen, setdrawerOpen] = React.useState(false)
 
       <Drawer anchor={'left'} open={drawerOpen} onClose={() => setdrawerOpen(false)}>
         <List>
-          <ListItem button key={1}>
-            <Link to='/'>Home</Link>
+          <ListItem button key={0}>
+              <Link to='/'>
+                <ListItemIcon><HomeIcon /></ListItemIcon>
+                <ListItemText primary={'Home'} />
+              </Link>
           </ListItem>
 
-          <ListItem button key={0}>
-            <Link to='/creator'>Creator</Link>
+          <ListItem button key={1}>
+            <Link to='/creator'>
+              <ListItemText primary={'Creator'} />
+            </Link>
           </ListItem>
         </List>
       </Drawer>
@@ -45,6 +72,9 @@ const [drawerOpen, setdrawerOpen] = React.useState(false)
       <Switch>
         <Route path="/creator">
           <Creator />
+        </Route>
+        <Route path='/executor'>
+          <Executor />
         </Route>
         <Route path="/">
           <Home />

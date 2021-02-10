@@ -70,6 +70,7 @@
     "@electron-forge/maker-zip": "^6.0.0-beta.54",
     "@electron-forge/plugin-webpack": "6.0.0-beta.54",
     "@marshallofsound/webpack-asset-relocator-loader": "^0.5.0",
+    "@types/crypto-js": "^4.0.1",
     "@types/electron-store": "^3.2.0",
     "@types/react-router-dom": "^5.1.7",
     "@typescript-eslint/eslint-plugin": "^4.0.1",
@@ -87,17 +88,22 @@
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.57",
+    "@types/firebase": "^3.2.1",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "crypto-js": "^4.0.0",
     "dayjs": "^1.10.4",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^7.0.1",
+    "firebase": "8.2.6",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-hot-loader": "^4.13.0",
     "react-keyboard-event-handler": "^1.5.4",
     "react-router-dom": "^5.2.0",
     "sass": "^1.32.5",
-    "sass-loader": "^10.1.1"
+    "sass-loader": "^10.1.1",
+    "use-sound": "^2.0.1"
   }
 }
