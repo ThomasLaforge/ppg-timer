@@ -10,6 +10,7 @@ $rest_color: #4ec6caba;
         padding: 25px 0;
         width: 100%;
         text-align: center;
+        min-height: 120px;
     }
     .session-informations {
         height: 500px;
@@ -117,23 +118,26 @@ $rest_color: #4ec6caba;
     .exercise-informations {
         display: flex;
         flex-direction: row;
-        height: 200px;
-        .exercise-image {
-            width: 25%;
+        height: 300px;
+        padding: 20px;
 
+        .exercise-image {
+            width: 35%;
+            padding: 10px;
             img {
                 width: 100%;
                 height: 100%;
             }
         }
+        
         .exercise-text {
             display: flex;
             flex-direction: column;
-            padding-inline: 20px;
+            margin-left: 20px;
             .exercise-name {
                 text-decoration: underline;
                 font-weight: bold;
-                font-size: 20px;
+                font-size: 30px;
             }
             .exercise-describtion {
                 padding-top: 10px;
