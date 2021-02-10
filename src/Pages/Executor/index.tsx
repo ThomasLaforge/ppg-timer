@@ -48,26 +48,30 @@ function useInterval(callback: Function, delay: number) {
   }
 
 export default function Executor() {
-    const match = useRouteMatch("/executor/:trainingIndex");
+    const [play, setPlay] = useState(false)
+    const [currentTime, setCurrentTime] = useState(0)
+    const [executorIndex, setExecutorIndex] = useState(0)
+    const [warmupDone, setWarmupDone] = useState(false)
+    const [loopRestDone, setLoopRestDone] = useState(false)
+    const [exerciseRestDone, setExerciseRestDone] = useState(false)
+    const [isRest, setIsRest] = useState(false)
+    const [playBip] = useSound(beepSfx);
     
+    const match = useRouteMatch("/executor/:trainingIndex");
     const params = match?.params as ExecuteRouteParams
     const {trainingIndex} = params
     const t = trainingsDB.get(trainingIndex)
+
     const training = new Training(t)
-    
-    const [play, setPlay] = useState(false)
-    const [exerciseOverRest, setExerciseOverRest] = useState(true)
-    const [intervalId, setintervalId] = useState(undefined)
-    const [currentTime, setCurrentTime] = useState(0)
-    const [executorIndex, setExecutorIndex] = useState(0)
-    const [isRest, setIsRest] = useState(false)
     const executorLength = training.executorList.length
     const loopIndex = training.getLoopIndex(executorIndex)
-    const timelineItems = training.getTimeLine(executorIndex)
     const exerciseIndex = training.getExerciseIndexInCurrentLoop(executorIndex)
-    const reptition = training.getRepetitionInCurrentLoop(executorIndex)
+    const timelineItems = training.getTimeLine(executorIndex)
+    const repetition = training.getRepetitionInCurrentLoop(executorIndex)
+    const loopRepetitions = t.data.loops[loopIndex].repetitions
     const elapsedTimeinSec = training.getElapsedTimeBefore(executorIndex) + currentTime
     const remainingTimeinSec = training.getRemainingTimeAfter(executorIndex) - currentTime
+    const currentExerciseData = training.getExerciseData(executorIndex)
     const currentExercise = training.getExercise(executorIndex)
     const isRepetionExercise = true
 
@@ -99,9 +103,9 @@ export default function Executor() {
         <React.Fragment>
             <div className="title">{t.data.name}</div>
             <div className="session-informations">
-                <div className={"timer " + (exerciseOverRest ? 'timer-in-exercise' : 'timer-in-rest')}>
+                <div className={"timer " + (isRest ? 'timer-in-rest' : 'timer-in-exercise')}>
                     <div className='current-loop-name'>
-                        loop {loopIndex}
+                        loop {loopIndex} {loopRepetitions > 1 ? `(${ repetition }/${t.data.loops[loopIndex].repetitions})` : ''}
                     </div>
                     <div className="current-timer">{dayjs(currentTime * 1000).format('mm:ss')}</div>
                     

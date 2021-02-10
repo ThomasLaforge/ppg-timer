@@ -33,6 +33,11 @@ export default class Training {
         , [] as ExerciseData[])
     }
 
+    getExerciseData(execurtorIndex: number){
+        const e = this.executorList[execurtorIndex]
+        return this.trainingData.data.loops[e.loopIndex].exercises[e.exerciseIndex]
+    }
+
     getExercise(execurtorIndex: number){
         const e = this.executorList[execurtorIndex]
         const { exerciseId } = this.trainingData.data.loops[e.loopIndex].exercises[e.exerciseIndex]
@@ -102,6 +107,6 @@ export default class Training {
     }
 
     getRepetitionInCurrentLoop(executorIndex: number){
-        return this.getExecutorElement(executorIndex).loopRepetition
+        return this.getExecutorElement(executorIndex).loopRepetition + 1
     }
 }
