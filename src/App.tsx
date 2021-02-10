@@ -2,10 +2,10 @@ import { hot } from 'react-hot-loader';
 import React, { useState } from "react";
 
 import {
-  BrowserRouter as Router,
   Switch,
   Route,
   Link,
+  HashRouter,
 } from "react-router-dom";
 
 import Home from './Pages/Home/index'
@@ -18,7 +18,7 @@ function App() {
 const [drawerOpen, setdrawerOpen] = React.useState(false)
 
   return (
-    <Router>
+    <HashRouter>
       <AppBar position="static">
         <Toolbar>
           <IconButton edge="start" color="inherit" aria-label="menu" onClick={() => setdrawerOpen(!drawerOpen)}>
@@ -50,7 +50,7 @@ const [drawerOpen, setdrawerOpen] = React.useState(false)
           <Home />
         </Route>
       </Switch>
-    </Router>
+    </HashRouter>
   );
 }
 
