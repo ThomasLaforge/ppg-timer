@@ -21,7 +21,7 @@ export default function Exercise(props: ExerciseProps){
                 {duration || exercise.defaultDuration}
             </div>
             : <div className="repetitions">
-                {repetitions || exercise.defaultRepetions}
+                {repetitions || exercise.defaultRepetitions}
             </div>
         }
     </div>

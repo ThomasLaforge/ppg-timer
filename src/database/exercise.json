@@ -2,7 +2,7 @@
     {
         "name": "Squats",
         "img": "https://musculation-nutrition.fr/wp-content/uploads/2018/11/Squat-au-poids-du-corps.png",
-        "defaultRepetitions" : 10
+        "defaultRepetitions" : 12
     },
     {
         "name": "Jumping Jacks",
@@ -11,6 +11,6 @@
     },
     {
         "name": "Burpees",
-        "defaultRepetition": 10
+        "defaultRepetitions": 10
     }
 ]
