@@ -21,9 +21,8 @@ body {
 
 .page {
   width: 1200px;
-  height: 100%;
   margin: auto;
-  
+  flex-grow: 1;  
   display: flex;
   flex-direction: column;
 }
