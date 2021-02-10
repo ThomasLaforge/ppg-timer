@@ -19,7 +19,7 @@ import Training from "../../modules/Training";
 import Page from "../../components/Page";
 
 import './style.scss'
-// import boopSfx from './beep.mp3';
+import beepSfx from '../../sounds/beep.mp3';
 
 interface ExecuteRouteParams {
     trainingIndex: number
@@ -71,16 +71,13 @@ export default function Executor() {
     const currentExercise = training.getExercise(executorIndex)
     const isRepetionExercise = true
 
-    // const [playActive] = useSound(
-    //     './beep.mp3',
-    //     { volume: 0.25 }
-    // );
+    const [playActive] = useSound(beepSfx);
 
     useInterval(() => {
         if(play){
             const nextTime = currentTime + 1
             if(currentTime >= 5){
-                // playActive()
+                playActive()
                 setExerciseOverRest(!exerciseOverRest)
                 setCurrentTime(0)
                 setExecutorIndex(executorIndex + 1)
