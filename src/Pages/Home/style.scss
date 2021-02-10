@@ -27,4 +27,22 @@
 
     }
 
+    .training-history {
+        padding-inline: 25px;
+
+        .training-history-title {
+            font-size: 25px;
+            font-weight: bold;
+            padding-top: 15px;
+        }
+    
+        .training-history-table-paper {
+            margin: 30px 0;
+        }
+
+        .training-table-header{
+            background-color: #94949452;
+        }
+    }
+
 }

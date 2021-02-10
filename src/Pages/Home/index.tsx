@@ -1,15 +1,25 @@
-import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { useMemo, useState } from "react";
+import { Button, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@material-ui/core";
+import SettingsIcon from '@material-ui/icons/Settings';
 import { Link } from "react-router-dom";
+import { trainingsDB } from "../../database";
 import Page from "../../components/Page";
+import FitnessCenterIcon from '@material-ui/icons/FitnessCenter';
+import MD5 from "crypto-js/md5";
+import Training from '../../modules/Training'
 
 import './style.scss'
+import { TrainingData } from "../../definitions";
+import dayjs from "dayjs";
+import { trainingsAPI } from "../../App";
+import { DeleteForever } from "@material-ui/icons";
 
-// function Row(props: { row: ReturnType<typeof createData> }) {
-//     const { row } = props;
-//     const [open, setOpen] = React.useState(false);
-//     const classes = useRowStyles();
-  
+export default function Home(){
+    const [importHash, setImportHash] = useState('')
+    const [updateTrainings, setUpdateTrainings] = useState(0)
+    const [importing, setImporting] = useState(false)
+    const [removing, setRemoving] = useState(false)
+    
     // trainingsDB.reset()
     let trainings: TrainingData[] = useMemo(() => trainingsDB.getAll(), [updateTrainings])
     const rows = trainings.map(({created_at, data}) => ({ created_at, name: data.name }))
@@ -37,8 +47,12 @@ import './style.scss'
             });
     }
 
-export default function Home(){
-    const [importLink, setImportLink] = useState('')
+    const handleRemove = (index: number) => {
+        // setRemoving(true)        
+        trainingsDB.remove(index)
+        // setRemoving(false)
+        setUpdateTrainings(Date.now())
+    }
 
     return <Page title={'home'} >
         <React.Fragment>
@@ -49,44 +63,70 @@ export default function Home(){
             <div className="import-module">
                 <Paper elevation={1} className='import-module-paper'>
                     <TextField 
-                        id="import-link"
-                        label="Link to import routine"
+                        id="import-id"
+                        label="Id to import routine"
                         className='import-module-input'
                         fullWidth
-                        value={importLink}
-                        onChange={(e) => setImportLink(e.target.value)}                
+                        value={importHash}
+                        onChange={(e) => setImportHash(e.target.value)}                
                     />
                     <Button 
                         className='import-module-btn'
                         variant="contained" 
                         color="primary"
+                        onClick={importFromHash}
                     >Importer</Button>
                 </Paper>
             </div>
 
-            <div className="training-history">
-                <Paper elevation={1} className='training-history-paper'>
-                <TableContainer component={Paper}>
-                    <Table aria-label="collapsible table">
-                        <TableHead>
+            <Paper elevation={1} className="training-history">
+                <div className="training-history-title">Trainings list</div>
+                <Paper elevation={4} className="training-history-table-paper">
+                    <Table aria-label="Training history">
+                        <TableHead className='training-table-header'>
                         <TableRow>
-                            <TableCell />
-                            <TableCell></TableCell>
-                            <TableCell align="right">Calories</TableCell>
-                            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-                            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-                            <TableCell align="right">Protein&nbsp;(g)</TableCell>
+                            <TableCell>Name</TableCell>
+                            <TableCell>Date de création</TableCell>
+                            <TableCell>Duration</TableCell>
+                            <TableCell>Code</TableCell>
+                            <TableCell>Modify</TableCell>
+                            <TableCell>Start</TableCell>
+                            <TableCell>Remove</TableCell>
                         </TableRow>
                         </TableHead>
                         <TableBody>
-                        {/* {rows.map((row) => (
-                            <Row key={row.name} row={row} />
-                        ))} */}
+                        {rows.map((row, k) => {
+                            const tData = trainingsDB.get(k)
+                            const training = new Training(tData)
+                            return (
+                            <TableRow key={k}>
+                                <TableCell>{row.name}</TableCell>
+                                <TableCell>{dayjs(row.created_at).format('DD-MM-YYYY')}</TableCell>
+                                <TableCell>{dayjs(training.getTotalTime() * 1000).format('mm:ss')}</TableCell>
+                                <TableCell>{MD5(JSON.stringify(tData.data)).toString()}</TableCell>
+                                <TableCell>
+                                    <Link to={`/creator/${k}`}>
+                                        <SettingsIcon/>
+                                    </Link>
+                                </TableCell>
+                                <TableCell>
+                                    <Link to={`/executor/${k}`}>
+                                        <FitnessCenterIcon/>
+                                    </Link>
+                                </TableCell>
+                                <TableCell>
+                                    <IconButton color="primary" aria-label="remove" component="span"
+                                        onClick={() => handleRemove(k)}
+                                    >
+                                        <DeleteForever />
+                                    </IconButton>
+                                </TableCell>
+                            </TableRow>
+                        )})}
                         </TableBody>
                     </Table>
-                    </TableContainer>
                 </Paper>
-            </div>
+            </Paper>
         </React.Fragment>
     </Page>
 }
