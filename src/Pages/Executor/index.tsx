@@ -73,21 +73,88 @@ export default function Executor() {
     const remainingTimeinSec = training.getRemainingTimeAfter(executorIndex) - currentTime
     const currentExerciseData = training.getExerciseData(executorIndex)
     const currentExercise = training.getExercise(executorIndex)
-    const isRepetionExercise = true
-
-    const [playActive] = useSound(beepSfx);
 
     useInterval(() => {
+        const nextTime = currentTime + 1
+
+        // +warmup 
+            // condition: !warmupDone && exerciseIndex = 0 && repetition = 1 && currentTime < warmupTime
+            // end : warmupDone = true
+        // exercise
+            // condition: warmupDone && !exerciseDone
+            // todo : exerciseDone = true 
+        // rest
+            // condition: exerciseDone && 
+        // loop rest
+            // condition: 
+            // 
+        // next loop
+            // condition : exerciseIndex = last && isRest && currentTime 
+            // todo : warmupDone + loopRestDone = false
+        // + end
+            // condition: executorIndex = executorLength
+            // todo: stop => setPlay(false)
+
         if(play){
-            const nextTime = currentTime + 1
-            if(currentTime >= 5){
-                playActive()
-                setExerciseOverRest(!exerciseOverRest)
-                setCurrentTime(0)
-                setExecutorIndex(executorIndex + 1)
-            } else {
-                setCurrentTime(nextTime)
+            // end
+            if(warmupDone && loopRestDone && 
+                executorIndex === executorLength
+            ){
+                setPlay(false)
+                return
             }
+            // warmup
+            if(!warmupDone){
+                console.log('warmup', loopIndex);
+                const warmupDuration = t.data.loops[loopIndex].warmup
+                if(currentTime < warmupDuration){
+                    setCurrentTime(nextTime)
+                    return
+                }
+                else {
+                    setWarmupDone(true)
+                    setCurrentTime(0)
+                    return
+                }
+            }
+
+            const currentLoop = t.data.loops[loopIndex]
+            const isLastRepetition = repetition === currentLoop.repetitions
+            const isLastExerciseOfLoop = exerciseIndex === currentLoop.exercises.length - 1
+
+            if(isLastExerciseOfLoop && isLastRepetition && exerciseRestDone && !loopRestDone){
+                console.log('loop rest', loopIndex);
+                const loopRestDuration = t.data.loops[loopIndex].warmup
+                if(currentTime < loopRestDuration){
+                    setCurrentTime(nextTime)
+                    return
+                }
+                else {
+                    setLoopRestDone(true)
+                    setCurrentTime(0)
+                    return
+                }
+            }
+            //     if(!isRest && !currentExerciseData.isDuration){
+            //         setCurrentTime(nextTime)
+            //     }
+            //     else {
+            //         const currentTimeLimit = isRest ? currentExerciseData.rest : currentExerciseData.value
+            //         if(currentTime >= currentTimeLimit){
+            //             setCurrentTime(0)
+            //             if(isRest){
+            //                 setExecutorIndex(executorIndex + 1)
+            //             }
+            //             else {
+    
+            //                 setIsRest(true)
+            //             }
+            //         }
+            //         else {
+            //             setCurrentTime(nextTime)
+            //         }
+            //     } 
+            // }
         }
     }, 1000)
 
