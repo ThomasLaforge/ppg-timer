@@ -1,0 +1,143 @@
+$warmup_color: #ffde50ba;
+$exercise_color: #4dd04dde;
+$rest_color: #4ec6caba;
+
+.executor{
+
+    .title {
+        font-weight: bold;
+        font-size: 55px;
+        padding: 25px 0;
+        width: 100%;
+        text-align: center;
+    }
+    .session-informations {
+        height: 500px;
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 50px;
+
+        .timer-in-exercise { background-color: $exercise_color; }
+        .timer-in-rest { background-color: $rest_color; }
+        .timer-in-warmup { background-color: $warmup_color; }
+        .timer {
+            height: 100%;
+            width: 80%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+            .current-loop-name {
+                width: 100%;
+                text-align: center;
+                font-size: 45px;
+                font-style: italic;
+                padding-top: 20px;
+            }
+
+            .current-timer {
+                position: relative;
+                top:-105px;
+                height: 45%;
+                text-align: center;
+                font-weight: bold;
+                font-size: 250px;
+            }
+            .training-timer-info {
+                width: 100%;
+                height: 25%;
+
+                border-top: 4px solid whitesmoke;
+                border-bottom: 4px solid whitesmoke;
+                
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                font-size: 30px;
+
+                .elapsed-box {
+                    padding: 8px 0;
+                    width: 33%;
+                    display: flex;
+                    flex-direction: column;
+                    text-align: center;
+                    border-right: 4px solid whitesmoke;
+                    
+                    .elapsed-box-value{
+                        letter-spacing: 0.7rem;
+                        font-weight: bold;
+                    }
+                }
+                
+                .remaining-box {
+                    padding: 8px 0;
+                    border-left: 4px solid whitesmoke;
+                    width: 33%;
+                    display: flex;
+                    flex-direction: column;
+                    text-align: center;
+                    
+                    .remaining-box-value{
+                        letter-spacing: 0.7rem;
+                        font-weight: bold;
+                    }
+                }
+            }
+            .timer-actions {
+                padding: 8px 0;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                height: 100%;
+                align-items: center;
+                cursor: pointer;
+                flex-grow: 1;
+
+                .play-btn, .pause-btn {
+                    height: 100px;
+                    width: 100px;
+                    // border: 8px solid black;
+                    // border-radius: 5px;
+                    // color: rgba(250, 250, 54, 0.938);
+                    color: whitesmoke;
+
+                    .action-btn-icon {
+                        font-size: 100px;
+                    }
+                }
+            }
+        }
+        .timeline-container {
+            height: 100%;
+            flex-grow: 1;
+            padding-top: 50px;
+        }
+
+    }
+    .exercise-informations {
+        display: flex;
+        flex-direction: row;
+        height: 200px;
+        .exercise-image {
+            width: 25%;
+
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+        .exercise-text {
+            display: flex;
+            flex-direction: column;
+            padding-inline: 20px;
+            .exercise-name {
+                text-decoration: underline;
+                font-weight: bold;
+                font-size: 20px;
+            }
+            .exercise-describtion {
+                padding-top: 10px;
+            }
+        }
+    }
+}
