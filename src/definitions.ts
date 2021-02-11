@@ -8,6 +8,7 @@ export const DEFAULT_EXERCISE_REPETITIONS = 10
 export const DEFAULT_EXERCISE_REST_TIME = 30 // in sec
 export const DEFAULT_EXERCISE_DURATION = 30 // in sec
 export const EXERCISES_LENGTH_IN_TIMELINE = 5
+export const REPETITION_DURATION = -1
 export interface ExerciseJsonData {
     name: string,
     id: number,

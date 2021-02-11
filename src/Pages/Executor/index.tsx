@@ -14,12 +14,29 @@ import { IconButton, Paper } from "@material-ui/core";
 import { PlayArrow, Pause } from "@material-ui/icons";
 
 import { trainingsDB } from "../../database";
-import Training from "../../modules/Training";
+import Training, {ExecutorElementType} from "../../modules/Training";
+import { REPETITION_DURATION } from "../../definitions";
 
 import Page from "../../components/Page";
 
 import './style.scss'
 import beepSfx from '../../sounds/beep.mp3';
+
+
+function getTimerColor(type: ExecutorElementType){
+    switch (type) {
+        case ExecutorElementType.Warmup:
+            return 'warmup'
+        case ExecutorElementType.Exercise:
+            return 'exercise'
+        case ExecutorElementType.Rest:
+            return 'rest'
+        case ExecutorElementType.LoopRest:
+            return 'loop-rest'
+        default:
+            return '';
+    }
+}
 
 interface ExecuteRouteParams {
     trainingIndex: number
@@ -51,10 +68,6 @@ export default function Executor() {
     const [play, setPlay] = useState(false)
     const [currentTime, setCurrentTime] = useState(0)
     const [executorIndex, setExecutorIndex] = useState(0)
-    const [warmupDone, setWarmupDone] = useState(false)
-    const [loopRestDone, setLoopRestDone] = useState(false)
-    const [exerciseRestDone, setExerciseRestDone] = useState(false)
-    const [isRest, setIsRest] = useState(false)
     const [playBip] = useSound(beepSfx);
     
     const match = useRouteMatch("/executor/:trainingIndex");
@@ -75,86 +88,23 @@ export default function Executor() {
     const currentExercise = training.getExercise(executorIndex)
 
     useInterval(() => {
-        const nextTime = currentTime + 1
-
-        // +warmup 
-            // condition: !warmupDone && exerciseIndex = 0 && repetition = 1 && currentTime < warmupTime
-            // end : warmupDone = true
-        // exercise
-            // condition: warmupDone && !exerciseDone
-            // todo : exerciseDone = true 
-        // rest
-            // condition: exerciseDone && 
-        // loop rest
-            // condition: 
-            // 
-        // next loop
-            // condition : exerciseIndex = last && isRest && currentTime 
-            // todo : warmupDone + loopRestDone = false
-        // + end
-            // condition: executorIndex = executorLength
-            // todo: stop => setPlay(false)
-
-        if(play){
-            // end
-            if(warmupDone && loopRestDone && 
-                executorIndex === executorLength
-            ){
-                setPlay(false)
-                return
+        if(play && executorIndex < executorLength){
+            const toExec = training.executorList[executorIndex]
+            if(toExec.duration === REPETITION_DURATION){
+                setExecutorIndex(executorIndex + 1)
             }
-            // warmup
-            if(!warmupDone){
-                console.log('warmup', loopIndex);
-                const warmupDuration = t.data.loops[loopIndex].warmup
-                if(currentTime < warmupDuration){
-                    setCurrentTime(nextTime)
-                    return
+            else {
+                if(currentTime >= toExec.duration){
+                    setExecutorIndex(executorIndex + 1)
+                    if(training.executorList[executorLength + 1].duration === REPETITION_DURATION){
+                        setPlay(false)
+                    }
+                    setCurrentTime(0)
                 }
                 else {
-                    setWarmupDone(true)
-                    setCurrentTime(0)
-                    return
+                    setCurrentTime(currentTime + 1)
                 }
             }
-
-            const currentLoop = t.data.loops[loopIndex]
-            const isLastRepetition = repetition === currentLoop.repetitions
-            const isLastExerciseOfLoop = exerciseIndex === currentLoop.exercises.length - 1
-
-            if(isLastExerciseOfLoop && isLastRepetition && exerciseRestDone && !loopRestDone){
-                console.log('loop rest', loopIndex);
-                const loopRestDuration = t.data.loops[loopIndex].warmup
-                if(currentTime < loopRestDuration){
-                    setCurrentTime(nextTime)
-                    return
-                }
-                else {
-                    setLoopRestDone(true)
-                    setCurrentTime(0)
-                    return
-                }
-            }
-            //     if(!isRest && !currentExerciseData.isDuration){
-            //         setCurrentTime(nextTime)
-            //     }
-            //     else {
-            //         const currentTimeLimit = isRest ? currentExerciseData.rest : currentExerciseData.value
-            //         if(currentTime >= currentTimeLimit){
-            //             setCurrentTime(0)
-            //             if(isRest){
-            //                 setExecutorIndex(executorIndex + 1)
-            //             }
-            //             else {
-    
-            //                 setIsRest(true)
-            //             }
-            //         }
-            //         else {
-            //             setCurrentTime(nextTime)
-            //         }
-            //     } 
-            // }
         }
     }, 1000)
 
@@ -170,7 +120,7 @@ export default function Executor() {
         <React.Fragment>
             <div className="title">{t.data.name}</div>
             <div className="session-informations">
-                <div className={"timer " + (isRest ? 'timer-in-rest' : 'timer-in-exercise')}>
+                <div className={"timer timer-in-" + (getTimerColor(training.executorList[executorIndex].type))}>
                     <div className='current-loop-name'>
                         loop {loopIndex} {loopRepetitions > 1 ? `(${ repetition }/${t.data.loops[loopIndex].repetitions})` : ''}
                     </div>

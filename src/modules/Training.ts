@@ -2,10 +2,19 @@ import { ExerciseData } from "../Pages/Creator/reducer";
 import { exerciseDB, trainingsDB } from "../database";
 import { EXERCISES_LENGTH_IN_TIMELINE, TrainingData } from "../definitions";
 
+export enum ExecutorElementType {
+    Warmup,
+    Exercise,
+    Rest,
+    LoopRest
+}
+
 export interface ExecutorElement {
-    loopIndex: number,
-    loopRepetition: number,
-    exerciseIndex: number
+    type: ExecutorElementType,
+    duration: number,
+    loopIndex?: number,
+    repetition?: number,
+    exerciseIndex?: number
 }
 
 export default class Training {
@@ -15,15 +24,39 @@ export default class Training {
         public trainingData: TrainingData
     ){
         this.executorList = trainingData.data.loops.flatMap((l, loopIndex) => {
-            return new Array(l.repetitions).fill('').flatMap((_, loopRepetition) => {
-                return l.exercises.flatMap((e, exerciseIndex) => {
-                    return {
+            let loopContent: ExecutorElement[] = []
+
+            new Array(l.repetitions).fill('').forEach((_, repetition) => {
+                l.exercises.forEach((e, exerciseIndex) => {
+                    const meta = {
                         loopIndex,
-                        loopRepetition,
+                        repetition,
                         exerciseIndex
                     }
+                    loopContent.push(Object.assign(meta, {
+                        type: ExecutorElementType.Exercise,
+                        duration: e.isDuration ? e.value : -1
+                    }))
+                    loopContent.push(Object.assign(meta, {
+                        type: ExecutorElementType.Rest,
+                        duration: e.rest,
+                    }))
+                })
+                loopContent.push({
+                    type: ExecutorElementType.LoopRest,
+                    duration: l.rest,
+                    loopIndex,
+                    repetition
                 })
             })
+
+            return [
+                {
+                    type: ExecutorElementType.Warmup,
+                    duration: l.warmup,
+                    loopIndex
+                }, 
+                ...loopContent]
         })
     }
 
@@ -44,13 +77,15 @@ export default class Training {
         return exerciseDB.getExercise(exerciseId)
     }
 
-    getTimeLine(executorIndex: number){
+    getTimeLine(executorIndex: number): string[]{
         // TODO: Add loops starts
         let nextElements = this.executorList
-            .slice(executorIndex, executorIndex + EXERCISES_LENGTH_IN_TIMELINE)
+            .slice(executorIndex)
+            .filter(e => e.type === ExecutorElementType.Exercise)
+            .slice(0, EXERCISES_LENGTH_IN_TIMELINE)
             .reduce( 
                 (nextElements, e) => 
-                    e.exerciseIndex === 0 && e.loopRepetition === 0 
+                    e.exerciseIndex === 0 && e.repetition === 0 
                         ? [...nextElements, { name: e.loopIndex}, e] 
                         : [...nextElements, e], 
             [])
@@ -91,10 +126,7 @@ export default class Training {
         return this.executorList
             .slice(startIndex, endIndex)
             .reduce( (elapsedTime, e, i) => {
-                const exerciseData = this.trainingData.data.loops[this.getLoopIndex(i + startIndex)].exercises[e.exerciseIndex]
-                const exerciseTime = exerciseData.isDuration ? exerciseData.value : 0
-                const exerciseRest = exerciseData.rest
-                return elapsedTime + exerciseTime + exerciseRest
+                return elapsedTime + e.duration
             }, 0)
     }
 
@@ -107,6 +139,6 @@ export default class Training {
     }
 
     getRepetitionInCurrentLoop(executorIndex: number){
-        return this.getExecutorElement(executorIndex).loopRepetition + 1
+        return this.getExecutorElement(executorIndex).repetition + 1
     }
 }
