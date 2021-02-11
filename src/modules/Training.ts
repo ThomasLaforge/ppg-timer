@@ -1,6 +1,6 @@
 import { ExerciseData } from "../Pages/Creator/reducer";
 import { exerciseDB, trainingsDB } from "../database";
-import { EXERCISES_LENGTH_IN_TIMELINE, TrainingData } from "../definitions";
+import { EXERCISES_LENGTH_IN_TIMELINE, REPETITION_DURATION, TrainingData } from "../definitions";
 
 export enum ExecutorElementType {
     Warmup,
@@ -33,14 +33,14 @@ export default class Training {
                         repetition,
                         exerciseIndex
                     }
-                    loopContent.push(Object.assign(meta, {
+                    loopContent.push(Object.assign({
                         type: ExecutorElementType.Exercise,
-                        duration: e.isDuration ? e.value : -1
-                    }))
-                    loopContent.push(Object.assign(meta, {
+                        duration: e.isDuration ? e.value : REPETITION_DURATION
+                    }, meta))
+                    loopContent.push(Object.assign({
                         type: ExecutorElementType.Rest,
                         duration: e.rest,
-                    }))
+                    }, meta))
                 })
                 loopContent.push({
                     type: ExecutorElementType.LoopRest,
@@ -49,7 +49,7 @@ export default class Training {
                     repetition
                 })
             })
-
+            
             return [
                 {
                     type: ExecutorElementType.Warmup,

@@ -15,7 +15,7 @@ import { PlayArrow, Pause } from "@material-ui/icons";
 
 import { trainingsDB } from "../../database";
 import Training, {ExecutorElementType} from "../../modules/Training";
-import { REPETITION_DURATION } from "../../definitions";
+import { ExerciseJsonData, REPETITION_DURATION } from "../../definitions";
 
 import Page from "../../components/Page";
 
@@ -68,6 +68,7 @@ export default function Executor() {
     const [play, setPlay] = useState(false)
     const [currentTime, setCurrentTime] = useState(0)
     const [executorIndex, setExecutorIndex] = useState(0)
+
     const [playBip] = useSound(beepSfx);
     
     const match = useRouteMatch("/executor/:trainingIndex");
@@ -76,32 +77,41 @@ export default function Executor() {
     const t = trainingsDB.get(trainingIndex)
 
     const training = new Training(t)
-    const executorLength = training.executorList.length
-    const loopIndex = training.getLoopIndex(executorIndex)
-    const exerciseIndex = training.getExerciseIndexInCurrentLoop(executorIndex)
-    const timelineItems = training.getTimeLine(executorIndex)
-    const repetition = training.getRepetitionInCurrentLoop(executorIndex)
-    const loopRepetitions = t.data.loops[loopIndex].repetitions
+    console.log('training', training.executorList)
+    const {executorList} = training
+    const executorLength = executorList.length
+    // const loopIndex = training.getLoopIndex(executorIndex)
+    // const exerciseIndex = training.getExerciseIndexInCurrentLoop(executorIndex)
+    const timelineItems: string[] = []
+    // const timelineItems = training.getTimeLine(executorIndex)
+    // const repetition = training.getRepetitionInCurrentLoop(executorIndex)
+    // const loopRepetitions = t.data.loops[loopIndex].repetitions
     const elapsedTimeinSec = training.getElapsedTimeBefore(executorIndex) + currentTime
     const remainingTimeinSec = training.getRemainingTimeAfter(executorIndex) - currentTime
-    const currentExerciseData = training.getExerciseData(executorIndex)
-    const currentExercise = training.getExercise(executorIndex)
+    const currentExecutorElement = executorIndex < executorLength ? executorList[executorIndex] : undefined
+    const currentExercise: ExerciseJsonData = undefined // training.getExercise(executorIndex)
 
     useInterval(() => {
         if(play && executorIndex < executorLength){
-            const toExec = training.executorList[executorIndex]
+            console.log('play');
+            const toExec = executorList[executorIndex]
             if(toExec.duration === REPETITION_DURATION){
+                console.log('skip not duration exercise');
                 setExecutorIndex(executorIndex + 1)
             }
             else {
+                console.log('duration exercise');
                 if(currentTime >= toExec.duration){
+                    console.log('end of exercise => go next and reset current time');
+                    setCurrentTime(1)
                     setExecutorIndex(executorIndex + 1)
-                    if(training.executorList[executorLength + 1].duration === REPETITION_DURATION){
+                    if( (executorIndex + 1 === executorLength) || executorList[executorIndex + 1].duration === REPETITION_DURATION){
+                        console.log('pause if next exercise is not duration one');
                         setPlay(false)
                     }
-                    setCurrentTime(0)
                 }
                 else {
+                    console.log('next time');
                     setCurrentTime(currentTime + 1)
                 }
             }
@@ -120,9 +130,9 @@ export default function Executor() {
         <React.Fragment>
             <div className="title">{t.data.name}</div>
             <div className="session-informations">
-                <div className={"timer timer-in-" + (getTimerColor(training.executorList[executorIndex].type))}>
+                <div className={"timer " + (currentExecutorElement ? 'timer-in-' + getTimerColor(currentExecutorElement.type) : '')}>
                     <div className='current-loop-name'>
-                        loop {loopIndex} {loopRepetitions > 1 ? `(${ repetition }/${t.data.loops[loopIndex].repetitions})` : ''}
+                        {/* loop {loopIndex} {loopRepetitions > 1 ? `(${ repetition }/${t.data.loops[loopIndex].repetitions})` : ''} */}
                     </div>
                     <div className="current-timer">{dayjs(currentTime * 1000).format('mm:ss')}</div>
                     
@@ -180,12 +190,12 @@ export default function Executor() {
             </div>
             <Paper className="exercise-informations">
                 <div className="exercise-image">
-                    <img src={currentExercise.img} />
+                    <img src={currentExercise?.img} />
                 </div>
                 <div className="exercise-text">
-                    <div className="exercise-name">{currentExercise.name}</div>
+                    <div className="exercise-name">{currentExercise?.name}</div>
                     <div className="exercise-describtion">
-                        {currentExercise.describtion}</div>
+                        {currentExercise?.describtion}</div>
                 </div>
             </Paper>
         </React.Fragment>
