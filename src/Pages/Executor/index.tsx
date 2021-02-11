@@ -103,7 +103,7 @@ export default function Executor() {
                 console.log('duration exercise');
                 if(currentTime >= toExec.duration){
                     console.log('end of exercise => go next and reset current time');
-                    setCurrentTime(1)
+                    setCurrentTime(0)
                     setExecutorIndex(executorIndex + 1)
                     if( (executorIndex + 1 === executorLength) || executorList[executorIndex + 1].duration === REPETITION_DURATION){
                         console.log('pause if next exercise is not duration one');

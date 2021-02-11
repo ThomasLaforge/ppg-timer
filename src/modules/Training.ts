@@ -111,11 +111,11 @@ export default class Training {
     }
 
     getElapsedTimeBefore(executorIndex: number){
-        return this.getTimeBetween(0, (executorIndex >= this.executorList.length) ? this.executorList.length - 1 : executorIndex)
+        return this.getTimeBetween(0, (executorIndex > this.executorList.length) ? this.executorList.length - 1 : executorIndex) - ((executorIndex > this.executorList.length - 1) ? 1 : 0)
     }
     
     getRemainingTimeAfter(executorIndex: number){
-        return this.getTimeBetween(executorIndex)
+        return this.getTimeBetween(executorIndex) - ((executorIndex > this.executorList.length - 1) ? 0 : 1)
     }
 
     getTotalTime(){
@@ -126,8 +126,8 @@ export default class Training {
         return this.executorList
             .slice(startIndex, endIndex)
             .reduce( (elapsedTime, e, i) => {
-                return elapsedTime + e.duration
-            }, 0)
+                return elapsedTime + e.duration + 1
+            }, 0) 
     }
 
     getLoopIndex(executorIndex: number){
