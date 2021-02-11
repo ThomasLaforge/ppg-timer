@@ -134,7 +134,7 @@ export default function Executor() {
                     <div className='current-loop-name'>
                         {/* loop {loopIndex} {loopRepetitions > 1 ? `(${ repetition }/${t.data.loops[loopIndex].repetitions})` : ''} */}
                     </div>
-                    <div className="current-timer">{dayjs(finished ? 0 : (currentExecutorElement.duration - currentTime) * 1000).format('mm:ss')}</div>
+                    <div className="current-timer">{dayjs(finished ? 0 : Math.max(0, currentExecutorElement.duration - currentTime) * 1000).format('mm:ss')}</div>
                     
                     <div className="training-timer-info">
                         <div className="elapsed-box">
