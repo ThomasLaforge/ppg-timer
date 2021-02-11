@@ -2,6 +2,7 @@ $warmup_color: #ffde50ba;
 $exercise_color: #4dd04dde;
 $rest_color: #4ec6caba;
 $loop_rest_color: blue;
+$timer_over_color: #cacaca;
 
 .executor{
 
@@ -23,6 +24,8 @@ $loop_rest_color: blue;
         .timer-in-rest { background-color: $rest_color; }
         .timer-in-warmup { background-color: $warmup_color; }
         .timer-in-loop-rest { background-color: $loop_rest_color; }
+        .timer-over { background-color: $timer_over_color; }
+
         .timer {
             height: 100%;
             width: 80%;

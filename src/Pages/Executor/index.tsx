@@ -90,7 +90,7 @@ export default function Executor() {
     const remainingTimeinSec = training.getRemainingTimeAfter(executorIndex) - currentTime
     const currentExecutorElement = executorIndex < executorLength ? executorList[executorIndex] : undefined
     const currentExercise: ExerciseJsonData = undefined // training.getExercise(executorIndex)
-
+    const finished = !currentExecutorElement
     useInterval(() => {
         if(play && executorIndex < executorLength){
             console.log('play');
@@ -130,11 +130,11 @@ export default function Executor() {
         <React.Fragment>
             <div className="title">{t.data.name}</div>
             <div className="session-informations">
-                <div className={"timer " + (currentExecutorElement ? 'timer-in-' + getTimerColor(currentExecutorElement.type) : '')}>
+                <div className={"timer " + (finished ? 'timer-over' : 'timer-in-' + getTimerColor(currentExecutorElement.type))}>
                     <div className='current-loop-name'>
                         {/* loop {loopIndex} {loopRepetitions > 1 ? `(${ repetition }/${t.data.loops[loopIndex].repetitions})` : ''} */}
                     </div>
-                    <div className="current-timer">{dayjs(currentTime * 1000).format('mm:ss')}</div>
+                    <div className="current-timer">{dayjs(finished ? 0 : (currentExecutorElement.duration - currentTime) * 1000).format('mm:ss')}</div>
                     
                     <div className="training-timer-info">
                         <div className="elapsed-box">
