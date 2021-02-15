@@ -56,7 +56,7 @@ export default class Training {
                     duration: l.warmup,
                     loopIndex
                 }, 
-                ...loopContent]
+                ...loopContent].filter(e => e.duration != 0)
         })
     }
 
@@ -81,18 +81,24 @@ export default class Training {
         // TODO: Add loops starts
         let nextElements = this.executorList
             .slice(executorIndex)
-            .filter(e => e.type === ExecutorElementType.Exercise)
+            .filter(e => [ExecutorElementType.Exercise, ExecutorElementType.LoopRest, ExecutorElementType.Warmup].includes(e.type))
             .slice(0, EXERCISES_LENGTH_IN_TIMELINE)
             .reduce( 
-                (nextElements, e) => 
-                    e.exerciseIndex === 0 && e.repetition === 0 
-                        ? [...nextElements, { name: e.loopIndex}, e] 
+                (nextElements, e, i) => 
+                    (e.exerciseIndex === 0 && e.repetition === 0  && i !== 0)
+                        ? [...nextElements, { name: `loop ${e.loopIndex + 1}`}, e] 
                         : [...nextElements, e], 
             [])
             .slice(0, EXERCISES_LENGTH_IN_TIMELINE)
         return nextElements
             .map(e => {
-                if(e.loopIndex || e.loopIndex === 0){
+                if(e.type === ExecutorElementType.Warmup){
+                    return 'Warmup'
+                }
+                else if(e.type === ExecutorElementType.LoopRest){
+                    return 'Rest'
+                }
+                else if(e.loopIndex || e.loopIndex === 0){
                     const { exerciseId } = this.trainingData.data.loops[e.loopIndex].exercises[e.exerciseIndex]
                     return exerciseDB.getExercise(exerciseId).name
                 }
