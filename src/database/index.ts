@@ -20,7 +20,7 @@ class Database {
 class ExerciseDB {
 
     getExerciseList(){
-        return require('./exercise.json') as ExerciseJsonData[]
+        return require('./exercises.json') as ExerciseJsonData[]
     }
 
     getExercise(id: number){

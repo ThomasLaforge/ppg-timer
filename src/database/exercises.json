@@ -15,5 +15,29 @@
         "name": "Burpees",
         "defaultRepetitions": 10,
         "describtion": "Souffre ! Souffre ! et Souffle ;) Va embrasser le sol et remonte puis saute pour te rapprocher du plafond. Hé tu fais quoi là ?! Allé on redescend, mon parquet va pas se laver tout seul ..."
+    },
+    {
+        "name": "Rameur",
+        "defaultDuration": 30
+    },
+    {
+        "name": "Petit chien",
+        "defaultDuration": 30
+    },
+    {
+        "name": "4 pattes fessiers",
+        "defaultDuration": 30
+    },
+    {
+        "name": "Abdos",
+        "defaultDuration": 30
+    },
+    {
+        "name": "Arraignée",
+        "defaultDuration": 30
+    },
+    {
+        "name": "Abdos latéraux",
+        "defaultDuration": 30
     }
 ]
