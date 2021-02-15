@@ -815,13 +815,6 @@
   dependencies:
     electron-store "*"
 
-"@types/firebase@^3.2.1":
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/@types/firebase/-/firebase-3.2.1.tgz#17c1c8fee7485ab09668d2461e34540bdf44b3b1"
-  integrity sha512-G8XgHMu2jHlElfc2xVNaYP50F0qrqeTCjgeG1v5b4SRwWG4XKC4fCuEdVZuZaMRmVygcnbRZBAo9O7RsDvmkGQ==
-  dependencies:
-    firebase "*"
-
 "@types/fs-extra@^9.0.1":
   version "9.0.6"
   resolved "https://registry.yarnpkg.com/@types/fs-extra/-/fs-extra-9.0.6.tgz#488e56b77299899a608b8269719c1d133027a6ab"
@@ -1567,6 +1560,23 @@ aws4@^1.8.0:
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.11.0.tgz#d61f46d83b2519250e2784daf5b09479a8b41c59"
   integrity sha512-xh1Rl34h6Fi1DC2WWKfxUTVqRsNnr6LsKz2+hfwDxQJWmrx8+c7ylaqBMcHfl1U1r2dsifOvKX3LQuLNZ+XSvA==
 
+babel-polyfill@^6.26.0:
+  version "6.26.0"
+  resolved "https://registry.yarnpkg.com/babel-polyfill/-/babel-polyfill-6.26.0.tgz#379937abc67d7895970adc621f284cd966cf2153"
+  integrity sha1-N5k3q8Z9eJWXCtxiHyhM2WbPIVM=
+  dependencies:
+    babel-runtime "^6.26.0"
+    core-js "^2.5.0"
+    regenerator-runtime "^0.10.5"
+
+babel-runtime@^6.26.0:
+  version "6.26.0"
+  resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.26.0.tgz#965c7058668e82b55d7bfe04ff2337bc8b5647fe"
+  integrity sha1-llxwWGaOgrVde/4E/yM3vItWR/4=
+  dependencies:
+    core-js "^2.4.0"
+    regenerator-runtime "^0.11.0"
+
 balanced-match@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
@@ -2048,6 +2058,11 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
+classnames@^2.2.5:
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
+  integrity sha512-JR/iSQOSt+LQIWwrwEzJ9uk0xfN3mTVYMwt1Ir5mUcSN6pU+V4zQFFaJsclJbPuAUQH+yfWef6tm7l1quW3C8Q==
+
 clean-css@^4.2.3:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/clean-css/-/clean-css-4.2.3.tgz#507b5de7d97b48ee53d84adb0160ff6216380f78"
@@ -2298,6 +2313,11 @@ core-js@3.6.5:
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.6.5.tgz#7395dc273af37fb2e50e9bd3d9fe841285231d1a"
   integrity sha512-vZVEEwZoIsI+vPEuoF9Iqf5H7/M3eeQqWlQnYa8FSKKePuYTf5MWnxb5SDAzCa60b3JBRS5g9b+Dq7b1y/RCrA==
 
+core-js@^2.4.0, core-js@^2.5.0:
+  version "2.6.12"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.12.tgz#d9333dfa7b065e347cc5682219d6f690859cc2ec"
+  integrity sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ==
+
 core-js@^3.6.5:
   version "3.8.3"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.8.3.tgz#c21906e1f14f3689f93abcc6e26883550dd92dd0"
@@ -2466,6 +2486,11 @@ currently-unhandled@^0.4.1:
   integrity sha1-mI3zP+qxke95mmE2nddsF635V+o=
   dependencies:
     array-find-index "^1.0.1"
+
+custom-electron-titlebar@^3.2.6:
+  version "3.2.6"
+  resolved "https://registry.yarnpkg.com/custom-electron-titlebar/-/custom-electron-titlebar-3.2.6.tgz#4cd064efa5020954c09732efa8c667a7ee3636e3"
+  integrity sha512-P3ZGEr0eouUHqhdBBXllpuy2bFhfSmp+32HQBPcwzujjIsUhQxQj/nCpJiFa4SUGAEp1ifu/icuZdDKNNX72Tw==
 
 cyclist@^1.0.1:
   version "1.0.1"
@@ -3556,7 +3581,7 @@ find-up@^5.0.0:
     locate-path "^6.0.0"
     path-exists "^4.0.0"
 
-firebase@*, firebase@8.2.6:
+firebase@8.2.6:
   version "8.2.6"
   resolved "https://registry.yarnpkg.com/firebase/-/firebase-8.2.6.tgz#6f02483a3468074495abdb992ed6c3c143dd9eac"
   integrity sha512-UHBAA8r7oIdbdafTGo3ED8wL9r/vdSgllN0yBzJMCyxk16DtL0oQnXRXwTU7FSc2c3JrvTUX9jtMFjtKjOUNMQ==
@@ -4383,6 +4408,17 @@ infer-owner@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/infer-owner/-/infer-owner-1.0.4.tgz#c4cefcaa8e51051c2a40ba2ce8a3d27295af9467"
   integrity sha512-IClj+Xz94+d7irH5qRyfJonOdfTzuDaifE6ZPWfx0N0+/ATZCbuTPq2prFl526urkQd90WyUKIh1DfBQ2hMz9A==
+
+infinite-react-carousel@^1.2.11:
+  version "1.2.11"
+  resolved "https://registry.yarnpkg.com/infinite-react-carousel/-/infinite-react-carousel-1.2.11.tgz#bbd12c1df1f45d7460815eb50ce1ea4364a81e5d"
+  integrity sha512-7MUNP+eh/6Eud+TViz0HYYvLJq/2CVsdMf9J9X/Ag9jRs/eb319vBpHvNEb0TtmbqrNbnSGHG0D3fVy41edy0g==
+  dependencies:
+    babel-polyfill "^6.26.0"
+    classnames "^2.2.5"
+    lodash "^4.17.15"
+    prop-types "^15.7.2"
+    resize-observer-polyfill "^1.5.0"
 
 inflight@^1.0.4:
   version "1.0.6"
@@ -6746,6 +6782,16 @@ redent@^1.0.0:
     indent-string "^2.1.0"
     strip-indent "^1.0.1"
 
+regenerator-runtime@^0.10.5:
+  version "0.10.5"
+  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.10.5.tgz#336c3efc1220adcedda2c9fab67b5a7955a33658"
+  integrity sha1-M2w+/BIgrc7dosn6tntaeVWjNlg=
+
+regenerator-runtime@^0.11.0:
+  version "0.11.1"
+  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.11.1.tgz#be05ad7f9bf7d22e056f9726cee5017fbf19e2e9"
+  integrity sha512-MguG95oij0fC3QV3URf4V2SDYGJhJnJGqvIIgdECeODCT98wSWDAJ94SSuVpYQUoTcGUIL6L4yNB7j1DFFHSBg==
+
 regenerator-runtime@^0.13.4:
   version "0.13.7"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.7.tgz#cac2dacc8a1ea675feaabaeb8ae833898ae46f55"
@@ -6842,6 +6888,11 @@ require-main-filename@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/require-main-filename/-/require-main-filename-2.0.0.tgz#d0b329ecc7cc0f61649f62215be69af54aa8989b"
   integrity sha512-NKN5kMDylKuldxYLSUfrbo5Tuzh4hd+2E8NPPX02mZtn1VuREQToYe/ZdlJy+J3uCpfaiGF05e7B8W0iXbQHmg==
+
+resize-observer-polyfill@^1.5.0:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/resize-observer-polyfill/-/resize-observer-polyfill-1.5.1.tgz#0e9020dd3d21024458d4ebd27e23e40269810464"
+  integrity sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg==
 
 resolve-alpn@^1.0.0:
   version "1.0.0"
