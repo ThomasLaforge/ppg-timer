@@ -191,18 +191,25 @@ export default function Creator(props: any){
 
             <div className="end-creation-actions">
                 <Button
+                    className='cancel-training-btn'
+                    variant="outlined" 
+                    color="primary"
+                    onClick={() => history.push('/')}
+                >Cancel</Button>
+                
+                <Button
                     className='save-training-btn'
                     variant="contained" 
                     color="primary"
                     onClick={saveTraining}
-                >Save Training</Button>
+                >Save</Button>
                 
                 <Button
                     className='start-training-btn'
                     variant="contained" 
                     color="secondary"
                     onClick={startTraining}
-                >Start Training</Button>
+                >Start</Button>
             </div>
         </CreatorContext.Provider>
     </Page>

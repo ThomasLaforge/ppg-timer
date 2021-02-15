@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
-import { Button, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField } from "@material-ui/core";
-import SettingsIcon from '@material-ui/icons/Settings';
+import { Button, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@material-ui/core";
+import CreateIcon from '@material-ui/icons/Create';
 import { Link } from "react-router-dom";
 import { trainingsDB } from "../../database";
 import Page from "../../components/Page";
@@ -106,12 +106,12 @@ export default function Home(){
                                 <TableCell>{MD5(JSON.stringify(tData.data)).toString()}</TableCell>
                                 <TableCell>
                                     <Link to={`/creator/${k}`}>
-                                        <SettingsIcon/>
+                                        <CreateIcon color='primary' />
                                     </Link>
                                 </TableCell>
                                 <TableCell>
                                     <Link to={`/executor/${k}`}>
-                                        <FitnessCenterIcon/>
+                                        <FitnessCenterIcon color='primary' />
                                     </Link>
                                 </TableCell>
                                 <TableCell>

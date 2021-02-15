@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useRouteMatch } from "react-router-dom";
+import { useHistory, useRouteMatch } from "react-router-dom";
 import useSound from 'use-sound';
+import KeyboardEventHandler from 'react-keyboard-event-handler';
 
 import dayjs from "dayjs";
 
@@ -10,10 +11,11 @@ import TimelineSeparator from '@material-ui/lab/TimelineSeparator';
 import TimelineConnector from '@material-ui/lab/TimelineConnector';
 import TimelineContent from '@material-ui/lab/TimelineContent';
 import TimelineDot from '@material-ui/lab/TimelineDot';
-import { IconButton, Paper } from "@material-ui/core";
-import { PlayArrow, Pause } from "@material-ui/icons";
 
-import { trainingsDB } from "../../database";
+import { IconButton, Paper } from "@material-ui/core";
+import { PlayArrow, Pause, Create, Home, Refresh } from "@material-ui/icons";
+
+import { exerciseDB, trainingsDB } from "../../database";
 import Training, {ExecutorElementType} from "../../modules/Training";
 import { ExerciseJsonData, REPETITION_DURATION } from "../../definitions";
 
@@ -21,6 +23,7 @@ import Page from "../../components/Page";
 
 import './style.scss'
 import beepSfx from '../../sounds/beep.mp3';
+import bigBeepSfx from '../../sounds/beep_long.mp3';
 
 
 function getTimerColor(type: ExecutorElementType){
@@ -69,7 +72,10 @@ export default function Executor() {
     const [currentTime, setCurrentTime] = useState(0)
     const [executorIndex, setExecutorIndex] = useState(0)
 
+    const history = useHistory()
+
     const [playBip] = useSound(beepSfx);
+    const [playBigBip] = useSound(bigBeepSfx);
     
     const match = useRouteMatch("/executor/:trainingIndex");
     const params = match?.params as ExecuteRouteParams
@@ -82,36 +88,60 @@ export default function Executor() {
     const executorLength = executorList.length
     // const loopIndex = training.getLoopIndex(executorIndex)
     // const exerciseIndex = training.getExerciseIndexInCurrentLoop(executorIndex)
-    const timelineItems: string[] = []
-    // const timelineItems = training.getTimeLine(executorIndex)
+    // const timelineItems: string[] = []
+    const timelineItems = training.getTimeLine(executorIndex)
     // const repetition = training.getRepetitionInCurrentLoop(executorIndex)
     // const loopRepetitions = t.data.loops[loopIndex].repetitions
     const elapsedTimeinSec = training.getElapsedTimeBefore(executorIndex) + currentTime
     const remainingTimeinSec = training.getRemainingTimeAfter(executorIndex) - currentTime
     const currentExecutorElement = executorIndex < executorLength ? executorList[executorIndex] : undefined
-    const currentExercise: ExerciseJsonData = undefined // training.getExercise(executorIndex)
+    const currentExercise: ExerciseJsonData = (currentExecutorElement && currentExecutorElement.type === ExecutorElementType.Exercise)
+        ? exerciseDB.getExercise(t.data.loops[currentExecutorElement.loopIndex].exercises[currentExecutorElement.exerciseIndex].exerciseId) 
+        : undefined // training.getExercise(executorIndex)
     const finished = !currentExecutorElement
+
     useInterval(() => {
         if(play && executorIndex < executorLength){
-            console.log('play');
             const toExec = executorList[executorIndex]
             if(toExec.duration === REPETITION_DURATION){
-                console.log('skip not duration exercise');
+                // console.log('skip not duration exercise');
                 setExecutorIndex(executorIndex + 1)
             }
             else {
-                console.log('duration exercise');
                 if(currentTime >= toExec.duration){
-                    console.log('end of exercise => go next and reset current time');
+                    // play last exercise bip
+                    // if(currentExecutorElement.type === ExecutorElementType.Exercise){
+                    //     // playBip()
+                    // }
+                    // console.log('end of exercise => go next and reset current time');
                     setCurrentTime(0)
-                    setExecutorIndex(executorIndex + 1)
-                    if( (executorIndex + 1 === executorLength) || executorList[executorIndex + 1].duration === REPETITION_DURATION){
-                        console.log('pause if next exercise is not duration one');
+                    const nextIndex = executorIndex + 1 
+                    setExecutorIndex(nextIndex)
+
+                    // end
+                    if( nextIndex === executorLength) {
                         setPlay(false)
+                    } 
+                    // next is exercise type = repetition
+                    else if(executorList[nextIndex].duration === REPETITION_DURATION){
+                        setPlay(false)
+                        playBip()
+                        // console.log('pause if next exercise is not duration one');
+                    }
+                    // bip to announce start of new exercise
+                    else if(executorList[nextIndex].type === ExecutorElementType.Exercise){
+                        playBip()
                     }
                 }
                 else {
-                    console.log('next time');
+                    if(toExec.type === ExecutorElementType.Exercise &&  toExec.duration - currentTime <= 4){
+                        if(toExec.duration - currentTime === 1){
+                            playBigBip()
+                        }
+                        else {
+                            playBip()
+                        }
+                    }
                     setCurrentTime(currentTime + 1)
                 }
             }
@@ -128,13 +158,49 @@ export default function Executor() {
 
     return <Page title='executor'>
         <React.Fragment>
-            <div className="title">{t.data.name}</div>
+            <KeyboardEventHandler
+                handleKeys={['space']}
+                onKeyEvent={() => {
+                    if(currentExecutorElement.type === ExecutorElementType.Exercise && currentExecutorElement.duration === REPETITION_DURATION){
+                        setExecutorIndex(executorIndex + 1)}
+                        setPlay(true)
+                    }
+                }
+                handleEventType={'keyup'}
+            />
+
+            <div className="info-bar">
+                <div className="title">{t.data.name}</div>
+                <div className="info-bar-actions">
+                    <IconButton className='actions-btn home-btn' onClick={() => history.push('/')}>
+                        <Home />
+                    </IconButton>
+                    <IconButton className='actions-btn creator-btn' onClick={() => history.push(`/creator/${trainingIndex}`)}>
+                        <Create />
+                    </IconButton>
+                    <IconButton className='actions-btn refresh-btn' 
+                        onClick={() => {
+                            setCurrentTime(0)
+                            setExecutorIndex(0)
+                            setPlay(false)    
+                        }}
+                    >
+                        <Refresh />
+                    </IconButton>
+                </div>
+            </div>
             <div className="session-informations">
                 <div className={"timer " + (finished ? 'timer-over' : 'timer-in-' + getTimerColor(currentExecutorElement.type))}>
                     <div className='current-loop-name'>
                         {/* loop {loopIndex} {loopRepetitions > 1 ? `(${ repetition }/${t.data.loops[loopIndex].repetitions})` : ''} */}
                     </div>
-                    <div className="current-timer">{dayjs(finished ? 0 : Math.max(0, currentExecutorElement.duration - currentTime) * 1000).format('mm:ss')}</div>
+                    <div className="current-timer">
+                    {
+                        (currentExecutorElement && currentExecutorElement.duration === REPETITION_DURATION) 
+                            ? t.data.loops[currentExecutorElement.loopIndex].exercises[currentExecutorElement.exerciseIndex].value
+                            : dayjs(finished ? 0 : Math.max(0, currentExecutorElement.duration - currentTime) * 1000).format('mm:ss')
+                    }
+                    </div>
                     
                     <div className="training-timer-info">
                         <div className="elapsed-box">
@@ -190,14 +256,14 @@ export default function Executor() {
             </div>
             <Paper className="exercise-informations">
                 <div className="exercise-image">
-                    <img src={currentExercise?.img} />
+                    {currentExercise && <img src={currentExercise.img} />}
                 </div>
                 <div className="exercise-text">
                     <div className="exercise-name">{currentExercise?.name}</div>
                     <div className="exercise-describtion">
                         {currentExercise?.describtion}</div>
                 </div>
-            </Paper>
+            </Paper>            
         </React.Fragment>
     </Page>
 }

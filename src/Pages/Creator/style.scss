@@ -106,17 +106,14 @@
     .end-creation-actions {
         display: flex;
         flex-direction: row;
-        width: 70%;
-        justify-content: space-between;
-        margin: 30px auto;
-
+        justify-content: space-evenly;
+        margin: 30px 0;
+        
+        
+        .start-training-btn,
+        .cancel-training-btn,
         .save-training-btn {
-            width: 300px;
-        }
-
-        .start-training-btn {
-            // background-color: #4dd04dde;
-            width: 300px;
+            width: 200px;
         }
     }
     
