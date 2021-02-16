@@ -35,7 +35,7 @@ export const theme = createMuiTheme({
   palette: {
     type: 'light',
     primary: {
-      main: 'rgba(5,15,62,0.94)',
+      main: 'rgba(5,15,62,0.9)',
     },
     secondary: {
       main: '#fad936',
