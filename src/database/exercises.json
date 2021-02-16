@@ -21,6 +21,10 @@
         "defaultDuration": 30
     },
     {
+        "name": "Vélo couché",
+        "defaultDuration": 30
+    },
+    {
         "name": "Petit chien",
         "defaultDuration": 30
     },
@@ -38,6 +42,35 @@
     },
     {
         "name": "Abdos latéraux",
+        "defaultDuration": 30
+    },
+    {
+        "name": "Gainage",
+        "defaultDuration": 30
+    },
+    {
+        "name": "Bras tendus",
+        "defaultDuration": 30
+    },
+    {
+        "name": "Papillon",
+        "split": true,
+        "defaultDuration": 30
+    },
+    {
+        "name": "Développés Militaires",
+        "defaultDuration": 30
+    },
+    {
+        "name": "Extension triceps arrière",
+        "defaultDuration": 30
+    },
+    {
+        "name": "Extensions bras côté",
+        "defaultDuration": 30
+    },
+    {
+        "name": "Dips",
         "defaultDuration": 30
     }
 ]
