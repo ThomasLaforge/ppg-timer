@@ -120,6 +120,10 @@ $timer_over_color: #cacaca;
                 cursor: pointer;
                 flex-grow: 1;
 
+                .secondary-actions {
+                    margin-inline: 15px;
+                }
+
                 .play-btn, .pause-btn {
                     height: 100px;
                     width: 100px;

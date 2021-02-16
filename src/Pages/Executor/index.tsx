@@ -13,7 +13,7 @@ import TimelineContent from '@material-ui/lab/TimelineContent';
 import TimelineDot from '@material-ui/lab/TimelineDot';
 
 import { IconButton, Paper } from "@material-ui/core";
-import { PlayArrow, Pause, Create, Home, Refresh } from "@material-ui/icons";
+import { PlayArrow, Pause, Create, Home, Refresh, SkipPrevious, SkipNext } from "@material-ui/icons";
 
 import { exerciseDB, trainingsDB } from "../../database";
 import Training, {ExecutorElementType} from "../../modules/Training";
@@ -213,23 +213,54 @@ export default function Executor() {
                         </div>
 
                         <div className="timer-actions">
-                            {!play 
-                                ? <IconButton 
-                                    className='play-btn'
-                                    size='medium' aria-label="Play training" component="span"
-                                    // onClick={() => setPlay(true)}
-                                    onClick={start}
+                            <div className="secondary-actions">
+                                <IconButton 
+                                    className='skip-previous-btn'
+                                    size='medium' aria-label="Skip previous" component="span"
+                                    onClick={() => {
+                                        if(executorIndex > 0){
+                                            setCurrentTime(0)  
+                                            setPlay(true)  
+                                            setExecutorIndex(executorIndex - 1)
+                                        }
+                                    }}
                                 >
-                                    <PlayArrow className='action-btn-icon' fontSize='large' />
+                                    <SkipPrevious className='action-btn-icon' fontSize='large' />
                                 </IconButton>
-                                : <IconButton 
-                                    className='pause-btn'
-                                    size='medium' aria-label="Pause training" component="span"
-                                    onClick={pause}
+                            </div>
+                            <div className="main-action">
+                                {!play 
+                                    ? <IconButton 
+                                        className='play-btn'
+                                        size='medium' aria-label="Play training" component="span"
+                                        onClick={start}
+                                    >
+                                        <PlayArrow className='action-btn-icon' fontSize='large' />
+                                    </IconButton>
+                                    : <IconButton 
+                                        className='pause-btn'
+                                        size='medium' aria-label="Pause training" component="span"
+                                        onClick={pause}
+                                    >
+                                        <Pause className='action-btn-icon' fontSize='large' />
+                                    </IconButton>
+                                }
+                            </div>
+                            <div className="secondary-actions">
+                                <IconButton 
+                                    className='skip-next-btn'
+                                    size='medium' aria-label="Skip next" component="span"
+                                    onClick={() => {
+                                        if(executorIndex < executorLength - 1){
+                                            setCurrentTime(0)  
+                                            setPlay(true)  
+                                            setExecutorIndex(executorIndex + 1)
+                                        }
+                                    }}
                                 >
-                                    <Pause className='action-btn-icon' fontSize='large' />
+                                    <SkipNext className='action-btn-icon' fontSize='large' />
                                 </IconButton>
-                            }
+                            </div>
                         </div>
 
                         <div className="remaining-box">
