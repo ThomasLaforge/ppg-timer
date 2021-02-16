@@ -34,8 +34,8 @@ export interface CreatorData {
 
 const DEFAULT_EXERCISE_DATA: ExerciseData = {
     exerciseId: 0,
-    isDuration: !!exerciseDB.getExercise(0).defaultDuration, // True = duration Else = Repetition
-    value: exerciseDB.getExercise(0).defaultDuration || exerciseDB.getExercise(0).defaultRepetitions,
+    isDuration: true, // True = duration Else = Repetition
+    value: DEFAULT_EXERCISE_DURATION,
     rest: DEFAULT_EXERCISE_REST_TIME
 }
 
@@ -166,10 +166,7 @@ export const reducer = (state: CreatorData, action: CreatorDispatch) => {
                     else {
                         return {...e, 
                             isDuration: action.value.value,
-                            value: exerciseDB.getExercise(e.exerciseId)[
-                                action.value.value ? 'defaultDuration' : 'defaultRepetitions']
-                            ||  (action.value.value ? DEFAULT_EXERCISE_DURATION : DEFAULT_EXERCISE_REPETITIONS)
-                        }
+                            value: action.value.value ? state.defaultExerciseDuration : state.defaultExerciseRepetions                        }
                     }
                 })}
             }
@@ -201,13 +198,12 @@ export const reducer = (state: CreatorData, action: CreatorDispatch) => {
                         return e
                     }
                     else {
-                        const isDuration = !!exerciseDB.getExercise(action.value.value).defaultDuration
+                        const isDuration = true
                         return {...e, 
                             exerciseId: action.value.value,
                             isDuration,
-                            value: exerciseDB.getExercise(action.value.value)[
-                                isDuration ? 'defaultDuration' : 'defaultRepetitions']
-                            ||  (isDuration ? DEFAULT_EXERCISE_DURATION : DEFAULT_EXERCISE_REPETITIONS)
+                            value: isDuration ? state.defaultExerciseDuration : state.defaultExerciseRepetions
+                              
                         }
                     }
                 })}
