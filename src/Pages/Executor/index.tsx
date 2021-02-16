@@ -83,21 +83,16 @@ export default function Executor() {
     const t = trainingsDB.get(trainingIndex)
 
     const training = new Training(t)
-    console.log('training', training.executorList)
+    // console.log('training', training.executorList)
     const {executorList} = training
     const executorLength = executorList.length
-    // const loopIndex = training.getLoopIndex(executorIndex)
-    // const exerciseIndex = training.getExerciseIndexInCurrentLoop(executorIndex)
-    // const timelineItems: string[] = []
     const timelineItems = training.getTimeLine(executorIndex)
-    // const repetition = training.getRepetitionInCurrentLoop(executorIndex)
-    // const loopRepetitions = t.data.loops[loopIndex].repetitions
     const elapsedTimeinSec = training.getElapsedTimeBefore(executorIndex) + currentTime
     const remainingTimeinSec = training.getRemainingTimeAfter(executorIndex) - currentTime
     const currentExecutorElement = executorIndex < executorLength ? executorList[executorIndex] : undefined
     const currentExercise: ExerciseJsonData = (currentExecutorElement && currentExecutorElement.type === ExecutorElementType.Exercise)
         ? exerciseDB.getExercise(t.data.loops[currentExecutorElement.loopIndex].exercises[currentExecutorElement.exerciseIndex].exerciseId) 
-        : undefined // training.getExercise(executorIndex)
+        : undefined
     const finished = !currentExecutorElement
 
     useInterval(() => {
@@ -109,11 +104,7 @@ export default function Executor() {
             }
             else {
                 if(currentTime >= toExec.duration){
-                    // play last exercise bip
-                    // if(currentExecutorElement.type === ExecutorElementType.Exercise){
-                    //     // playBip()
-                    // }
-                    // console.log('end of exercise => go next and reset current time');
+                    // end of exercise => go next and reset current time
                     setCurrentTime(0)
                     const nextIndex = executorIndex + 1 
                     setExecutorIndex(nextIndex)
@@ -124,9 +115,9 @@ export default function Executor() {
                     } 
                     // next is exercise type = repetition
                     else if(executorList[nextIndex].duration === REPETITION_DURATION){
+                        // pause if next exercise is not duration one');
                         setPlay(false)
                         playBip()
-                        // console.log('pause if next exercise is not duration one');
                     }
                     // bip to announce start of new exercise
                     else if(executorList[nextIndex].type === ExecutorElementType.Exercise){
@@ -134,7 +125,9 @@ export default function Executor() {
                     }
                 }
                 else {
+                    // Bip 3 last seconds
                     if(toExec.type === ExecutorElementType.Exercise &&  toExec.duration - currentTime <= 4){
+                        // Long bip if last second
                         if(toExec.duration - currentTime === 1){
                             playBigBip()
                         }
@@ -142,6 +135,7 @@ export default function Executor() {
                             playBip()
                         }
                     }
+                    
                     setCurrentTime(currentTime + 1)
                 }
             }
