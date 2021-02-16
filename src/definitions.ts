@@ -11,10 +11,7 @@ export const EXERCISES_LENGTH_IN_TIMELINE = 5
 export const REPETITION_DURATION = -1
 export interface ExerciseJsonData {
     name: string,
-    id: number,
-    img: string, // url/src format
-    defaultRepetitions?: number,
-    defaultDuration?: number, // in sec
+    img?: string, // url/src format
     describtion?: number
 }
 
@@ -41,3 +38,5 @@ export interface TrainingData {
     updated_at: number,
     note?: number,
 }
+
+export const mainColor = '#1F2443'

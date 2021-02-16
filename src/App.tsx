@@ -18,6 +18,7 @@ import Executor from './Pages/Executor';
 
 import firebase from 'firebase/app';
 import 'firebase/firestore';
+import { mainColor } from './definitions';
 
 if (firebase.apps.length === 0) {
   firebase.initializeApp({
@@ -30,12 +31,13 @@ if (firebase.apps.length === 0) {
 const api = firebase.firestore();
 export const trainingsAPI = api.collection("trainings")
 
+console.log('mainColor', mainColor)
 
 export const theme = createMuiTheme({
   palette: {
     type: 'light',
     primary: {
-      main: 'rgba(5,15,62,0.9)',
+      main: mainColor
     },
     secondary: {
       main: '#fad936',
@@ -49,34 +51,6 @@ function App() {
   return (
     <HashRouter>
       <ThemeProvider theme={theme}>
-        <AppBar position="static">
-          <Toolbar>
-            <IconButton edge="start" color="secondary" aria-label="menu" onClick={() => setdrawerOpen(!drawerOpen)}>
-              <MenuIcon />
-            </IconButton>
-            <Typography color='secondary' variant="h6" >
-              PPG Timer
-            </Typography>
-          </Toolbar>
-        </AppBar>
-
-        <Drawer anchor={'left'} open={drawerOpen} onClose={() => setdrawerOpen(false)}>
-          <List>
-            <ListItem button key={0}>
-                <Link to='/'>
-                  <ListItemIcon><HomeIcon /></ListItemIcon>
-                  <ListItemText primary={'Home'} />
-                </Link>
-            </ListItem>
-
-            <ListItem button key={1}>
-              <Link to='/creator'>
-                <ListItemText primary={'Creator'} />
-              </Link>
-            </ListItem>
-          </List>
-        </Drawer>
-
         <Switch>
           <Route path="/creator">
             <Creator />
