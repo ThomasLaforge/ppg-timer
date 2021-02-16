@@ -1,6 +1,6 @@
 import { hot } from 'react-hot-loader';
 import React, { useState } from "react";
-
+import './i18n';
 import {
   Switch,
   Route,

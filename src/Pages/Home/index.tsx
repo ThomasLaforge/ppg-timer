@@ -7,6 +7,7 @@ import Page from "../../components/Page";
 import FitnessCenterIcon from '@material-ui/icons/FitnessCenter';
 import MD5 from "crypto-js/md5";
 import Training from '../../modules/Training'
+import { useTranslation } from 'react-i18next';
 
 import './style.scss'
 import { TrainingData } from "../../definitions";
@@ -19,6 +20,7 @@ export default function Home(){
     const [updateTrainings, setUpdateTrainings] = useState(0)
     const [importing, setImporting] = useState(false)
     const [removing, setRemoving] = useState(false)
+    const { t } = useTranslation();
     
     // trainingsDB.reset()
     let trainings: TrainingData[] = useMemo(() => trainingsDB.getAll(), [updateTrainings])
@@ -57,14 +59,14 @@ export default function Home(){
     return <Page title={'home'} >
         <React.Fragment>
             <div className="app-title">
-                PPG Timer
+                {t('home.app-title')}
             </div>
 
             <div className="import-module">
                 <Paper elevation={1} className='import-module-paper'>
                     <TextField 
                         id="import-id"
-                        label="Id to import routine"
+                        label={t('home.import-label')}
                         className='import-module-input'
                         fullWidth
                         value={importHash}
@@ -75,7 +77,7 @@ export default function Home(){
                         variant="contained" 
                         color="primary"
                         onClick={importFromHash}
-                    >Importer</Button>
+                    >{t('home.import-btn')}</Button>
                 </Paper>
             </div>
 

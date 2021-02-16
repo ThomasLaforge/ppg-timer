@@ -100,9 +100,12 @@
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^7.0.1",
     "firebase": "8.2.6",
+    "i18next": "^19.8.7",
+    "i18next-electron-language-detector": "^0.0.10",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-hot-loader": "^4.13.0",
+    "react-i18next": "^11.8.6",
     "react-keyboard-event-handler": "^1.5.4",
     "react-router-dom": "^5.2.0",
     "use-sound": "^2.0.1"
