@@ -9,14 +9,16 @@ const resources = {
     translation: {
         "home.app-title": "PPG Timer",
         "home.import-label": "Id to import routine",
-        "home.import-btn": "Import"
+        "home.import-btn": "Import",
+        "home.training-history-title": "training list"
     }
   },
   fr: {
     translation: {
         "home.app-title": "PPG Timer",
         "home.import-label": "Saisissez le code d'importation",
-        "home.import-btn": "Importer"
+        "home.import-btn": "Importer",
+        "home.training-history-title": "liste des entrainements"
     }
   }
 };

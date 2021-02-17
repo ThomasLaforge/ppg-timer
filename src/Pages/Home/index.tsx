@@ -82,7 +82,7 @@ export default function Home(){
             </div>
 
             <Paper elevation={1} className="training-history">
-                <div className="training-history-title">Trainings list</div>
+                <div className="training-history-title">{t('home.training-history-title')}</div>
                 <Paper elevation={4} className="training-history-table-paper">
                     <Table aria-label="Training history">
                         <TableHead className='training-table-header'>
