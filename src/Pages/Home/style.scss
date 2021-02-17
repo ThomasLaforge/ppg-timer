@@ -7,24 +7,56 @@
         text-align: center;
     }
 
-    .import-module {
-        margin: 40px 0;
-    
-        .import-module-paper {
-            padding: 20px 20px;
+    .welcome {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 25px;
+        
+        .welcome-annouce {
+            padding: 30px;
+            margin-bottom: 25px;
+            text-align: center;
+        } 
+
+        .welcome-initial-actions {
             display: flex;
-            flex-direction: row;
-            justify-content: space-around;
+            flex-direction: column;
+            text-align: center;
 
-            .import-module-input {
-                width: 70%;
-            }
+            .welcome-initial-actions-list {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                height: 130px;
 
-            .import-module-btn {
-                width: 20%;
+                .creation-link, .import-module {
+                    align-items: center;
+                    height: 100%;
+                    padding: 30px auto;
+                }
+
+                .creation-link {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 45%;
+                }
+
+                .import-module {
+                    width: 50%;                
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-evenly;
+            
+                    .import-module-input {
+                        width: 285px;
+                    }
+        
+                    .import-module-btn {
+                    }
+                }
             }
         }
-
     }
 
     .training-history {

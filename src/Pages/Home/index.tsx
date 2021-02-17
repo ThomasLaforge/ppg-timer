@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
-import { Button, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@material-ui/core";
+import { Button, ButtonBase, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@material-ui/core";
 import CreateIcon from '@material-ui/icons/Create';
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { trainingsDB } from "../../database";
 import Page from "../../components/Page";
 import FitnessCenterIcon from '@material-ui/icons/FitnessCenter';
@@ -21,6 +21,7 @@ export default function Home(){
     const [importing, setImporting] = useState(false)
     const [removing, setRemoving] = useState(false)
     const { t } = useTranslation();
+    const history = useHistory()
     
     // trainingsDB.reset()
     let trainings: TrainingData[] = useMemo(() => trainingsDB.getAll(), [updateTrainings])
@@ -62,23 +63,44 @@ export default function Home(){
                 {t('home.app-title')}
             </div>
 
-            <div className="import-module">
-                <Paper elevation={1} className='import-module-paper'>
-                    <TextField 
-                        id="import-id"
-                        label={t('home.import-label')}
-                        className='import-module-input'
-                        fullWidth
-                        value={importHash}
-                        onChange={(e) => setImportHash(e.target.value)}                
-                    />
-                    <Button 
-                        className='import-module-btn'
-                        variant="contained" 
-                        color="primary"
-                        onClick={importFromHash}
-                    >{t('home.import-btn')}</Button>
+            <div className="welcome">
+                <Paper elevation={1} className="welcome-annouce">
+                    <div className="welcome-annouce-msg">
+                        {t('home.welcome.annouce')}
+                    </div>
+                    <div className="welcome-initial-actions-sentence">
+                        {t('home.welcome.initial-actions-sentence')}
+                    </div>
                 </Paper>
+                <div className='welcome-initial-actions'>
+                    <div className="welcome-initial-actions-list">
+                        <Paper elevation={1} className="creation-link">
+                            <Button
+                                variant='contained'
+                                color='primary'
+                                onClick={() => history.push('./creator')}
+                            >
+                                {t('home.welcome.creation-link')}
+                            </Button>
+                        </Paper>
+                        <Paper elevation={1} className="import-module">
+                                <TextField 
+                                    id="import-id"
+                                    label={t('home.import-label')}
+                                    className='import-module-input'
+                                    fullWidth
+                                    value={importHash}
+                                    onChange={(e) => setImportHash(e.target.value)}                
+                                />
+                                <Button 
+                                    className='import-module-btn'
+                                    variant="contained" 
+                                    color="primary"
+                                    onClick={importFromHash}
+                                >{t('home.import-btn')}</Button>
+                        </Paper>
+                    </div>
+                </div>
             </div>
 
             <Paper elevation={1} className="training-history">
