@@ -113,6 +113,7 @@
     "crypto-js": "^4.0.0",
     "custom-electron-titlebar": "^3.2.6",
     "dayjs": "^1.10.4",
+    "electron-log": "^4.3.1",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^7.0.1",
     "firebase": "8.2.6",
