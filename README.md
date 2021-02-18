@@ -8,12 +8,22 @@ Now, we can use new world possibilities to make it smarter and easier to manage.
 The solution we chose is to have an app 100% autonomous in internet connection, to be sure anywhere we go, it will work as "paper and watch" combo ^^ You'll still have the possibility to get some cloud bonus.
 
 ## Use cases
-[x] - Create trainings easiest way but with maximum powers
-[x] - Execute trainings with smooth UI and less interaction needed.
-[x] - No useless pause on training
-[x] - Long training possible with multi loops and repetitions
-[x] - Share trainings with friends
-[ ] - Add or create exercises
+[x] - Create trainings easiest way but with maximum powers  
+[x] - Execute trainings with smooth UI and less interaction needed.  
+[x] - No useless pause on training  
+[x] - Long training possible with multi loops and repetitions  
+[x] - Share trainings with friends  
+[ ] - Add or create exercises  
+
+## Developement
+### Publish
+To publish, you have to set env GITHUB_TOKEN.
+$env:GITHUB_TOKEN = 'my_token'
+
+then:  
+Get-ChildItem -Path Env:\  
+to check it worked
+
 
 ## Data Model
 
