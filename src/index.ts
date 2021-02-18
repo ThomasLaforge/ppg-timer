@@ -7,7 +7,7 @@ declare const MAIN_WINDOW_WEBPACK_ENTRY: any;
 
 // require('update-electron-app')()
 require('update-electron-app')({
-  updateInterval: '1 hour',
+  updateInterval: '2 minutes',
   logger: require('electron-log')
 })
 
