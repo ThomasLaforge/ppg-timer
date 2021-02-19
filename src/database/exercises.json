@@ -64,5 +64,28 @@
     },
     {
         "name": "Pas de patineur"
+    },
+    {
+        "name": "Chenille"
+    },
+    {
+        "name": "La brouette",
+        "describtion": "Un gainage bras droit et l'autre tiens les pieds + squats"
+    },
+    {
+        "name": "gainage inversé + dips sur les genoux",
+        "describtion": "Un gainage bras droit regard vers le ciel et l'autre fait des dips sur les genoux"
+    },
+    {
+        "name": "planche + check en duo",
+        "describtion": "les deux font la planche face à face et se check"
+    },
+    {
+        "name": "abdos + gainage",
+        "describtion": "un qui fait des abdos et l'autre fait du gainage en lui tenant les pieds"
+    },
+    {
+        "name": "quatre pattes en duo",
+        "describtion": "face à face, à quatre pattes, check plus lever la jambe opposée"
     }
 ]
