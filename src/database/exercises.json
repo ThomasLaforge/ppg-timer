@@ -20,10 +20,12 @@
         "name": "Vélo couché"
     },
     {
-        "name": "Petit chien"
+        "name": "Petit chien",
+        "split": true
     },
     {
-        "name": "4 pattes fessiers"
+        "name": "4 pattes fessiers",
+        "split": true
     },
     {
         "name": "Abdos"
@@ -57,7 +59,8 @@
         "name": "Dips"
     },
     {
-        "name": "Fentes"
+        "name": "Fentes",
+        "split": true
     },
     {
         "name": "Chaise"

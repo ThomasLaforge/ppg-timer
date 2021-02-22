@@ -126,12 +126,18 @@ export default function Executor() {
                 }
                 else {
                     // Bip 3 last seconds
-                    if(toExec.type === ExecutorElementType.Exercise &&  toExec.duration - currentTime <= 4){
-                        // Long bip if last second
-                        if(toExec.duration - currentTime === 1){
-                            playBigBip()
+                    if(toExec.type === ExecutorElementType.Exercise){
+                        if(toExec.duration - currentTime <= 4){
+                            // Long bip if last second
+                            if(toExec.duration - currentTime === 1){
+                                playBigBip()
+                            }
+                            else {
+                                playBip()
+                            }
                         }
-                        else {
+                        // Bip at half time of exercise with split property
+                        else if(currentExercise?.split && Math.ceil(toExec.duration / 2) === currentTime + 1){
                             playBip()
                         }
                     }

@@ -12,7 +12,8 @@ export const REPETITION_DURATION = -1
 export interface ExerciseJsonData {
     name: string,
     img?: string, // url/src format
-    describtion?: number
+    describtion?: number,
+    split?: boolean
 }
 
 export interface ExerciseConfigured {
