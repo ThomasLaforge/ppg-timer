@@ -16,14 +16,15 @@ The solution we chose is to have an app 100% autonomous in internet connection, 
 [ ] - Add or create exercises  
 
 ## Developement
+
 ### Publish
+
 To publish, you have to set env GITHUB_TOKEN.
 $env:GITHUB_TOKEN = 'my_token'
 
 then:  
 Get-ChildItem -Path Env:\  
 to check it worked
-
 
 ## Data Model
 

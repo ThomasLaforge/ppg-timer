@@ -1,131 +1,67 @@
 {
-  "name": "ppg-timer",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ThomasLaforge/ppg-time.git"
-  },
-  "productName": "ppg-timer",
-  "version": "0.1.8",
-  "description": "App to create training session based on HIIT timers but in much better ^^",
-  "main": ".webpack/main",
+  "name": "ppg-timer-electron-vite",
+  "version": "1.0.0",
+  "description": "An Electron application with React and TypeScript",
+  "main": "./out/main/index.js",
+  "author": "example.com",
+  "homepage": "https://electron-vite.org",
   "scripts": {
-    "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
-    "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts ."
-  },
-  "keywords": [],
-  "author": {
-    "name": "Thomas Laforge",
-    "email": "thomas.laforge.38@gmail.com"
-  },
-  "license": "MIT",
-  "config": {
-    "forge": {
-      "publishers": [
-        {
-          "name": "@electron-forge/publisher-github",
-          "config": {
-            "repository": {
-              "owner": "ThomasLaforge",
-              "name": "ppg-timer"
-            }
-          }
-        }
-      ],
-      "packagerConfig": {},
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "ppg-timer"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ],
-      "plugins": [
-        [
-          "@electron-forge/plugin-webpack",
-          {
-            "mainConfig": "./webpack.main.config.js",
-            "renderer": {
-              "config": "./webpack.renderer.config.js",
-              "entryPoints": [
-                {
-                  "html": "./src/index.html",
-                  "js": "./src/renderer.tsx",
-                  "name": "main_window"
-                }
-              ]
-            }
-          }
-        ]
-      ]
-    }
-  },
-  "devDependencies": {
-    "@electron-forge/cli": "^6.0.0-beta.54",
-    "@electron-forge/maker-deb": "^6.0.0-beta.54",
-    "@electron-forge/maker-rpm": "^6.0.0-beta.54",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
-    "@electron-forge/maker-zip": "^6.0.0-beta.54",
-    "@electron-forge/plugin-webpack": "6.0.0-beta.54",
-    "@electron-forge/publisher-github": "^6.0.0-beta.54",
-    "@marshallofsound/webpack-asset-relocator-loader": "^0.5.0",
-    "@types/crypto-js": "^4.0.1",
-    "@types/electron-store": "^3.2.0",
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
-    "@types/react-router-dom": "^5.1.7",
-    "@typescript-eslint/eslint-plugin": "^4.0.1",
-    "@typescript-eslint/parser": "^4.0.1",
-    "css-loader": "^4.2.1",
-    "electron": "11.2.1",
-    "eslint": "^7.6.0",
-    "eslint-plugin-import": "^2.20.0",
-    "file-loader": "^6.2.0",
-    "fork-ts-checker-webpack-plugin": "^5.0.14",
-    "node-loader": "^1.0.1",
-    "sass": "^1.32.5",
-    "sass-loader": "^10.1.1",
-    "style-loader": "^1.2.1",
-    "ts-loader": "^8.0.2",
-    "typescript": "^4.0.2"
+    "format": "prettier --write .",
+    "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
+    "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
+    "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false",
+    "typecheck": "npm run typecheck:node && npm run typecheck:web",
+    "start": "electron-vite preview",
+    "dev": "electron-vite dev",
+    "build": "npm run typecheck && electron-vite build",
+    "postinstall": "electron-builder install-app-deps",
+    "build:unpack": "npm run build && electron-builder --dir",
+    "build:win": "npm run build && electron-builder --win",
+    "build:mac": "electron-vite build && electron-builder --mac",
+    "build:linux": "electron-vite build && electron-builder --linux"
   },
   "dependencies": {
-    "@material-ui/core": "^4.11.3",
-    "@material-ui/icons": "^4.11.2",
-    "@material-ui/lab": "^4.0.0-alpha.57",
-    "crypto-js": "^4.0.0",
-    "custom-electron-titlebar": "^3.2.6",
-    "dayjs": "^1.10.4",
-    "electron-log": "^4.3.1",
-    "electron-squirrel-startup": "^1.0.0",
-    "electron-store": "^7.0.1",
-    "firebase": "8.2.6",
-    "i18next": "^19.8.7",
+    "@electron-toolkit/preload": "^3.0.0",
+    "@electron-toolkit/utils": "^3.0.0",
+    "@material-ui/core": "^4.12.4",
+    "@material-ui/icons": "^4.11.3",
+    "@material-ui/lab": "^4.0.0-alpha.61",
+    "@types/lodash": "^4.17.0",
+    "@vitejs/plugin-react-refresh": "^1.3.6",
+    "builtin-modules": "^3.3.0",
+    "crypto-js": "^4.2.0",
+    "custom-electron-titlebar": "^4.2.8",
+    "dayjs": "^1.11.10",
+    "electron-store": "^8.2.0",
+    "electron-updater": "^6.1.7",
+    "firebase": "^10.9.0",
+    "i18next": "^23.10.1",
     "i18next-electron-language-detector": "^0.0.10",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-hot-loader": "^4.13.0",
-    "react-i18next": "^11.8.6",
+    "lodash": "^4.17.21",
+    "react-i18next": "^14.1.0",
     "react-keyboard-event-handler": "^1.5.4",
-    "react-router-dom": "^5.2.0",
-    "update-electron-app": "^2.0.1",
-    "use-sound": "^2.0.1"
+    "react-router-dom": "^6.22.3",
+    "use-sound": "^4.0.1",
+    "vite-plugin-commonjs-externals": "^0.1.4"
+  },
+  "devDependencies": {
+    "@electron-toolkit/eslint-config-prettier": "^2.0.0",
+    "@electron-toolkit/eslint-config-ts": "^1.0.1",
+    "@electron-toolkit/tsconfig": "^1.0.1",
+    "@types/node": "^18.19.9",
+    "@types/react": "^18.2.48",
+    "@types/react-dom": "^18.2.18",
+    "@vitejs/plugin-react": "^4.2.1",
+    "electron": "^28.2.0",
+    "electron-builder": "^24.9.1",
+    "electron-vite": "^2.0.0",
+    "eslint": "^8.56.0",
+    "eslint-plugin-react": "^7.33.2",
+    "prettier": "^3.2.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "sass": "^1.72.0",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.12"
   }
 }

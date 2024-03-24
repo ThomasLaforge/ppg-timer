@@ -1,0 +1,120 @@
+@mixin creator_titles {
+    font-weight: bold;
+    font-style: italic;
+    font-size: 25px;
+    margin-bottom: 30px;
+}
+
+@mixin creator_box {
+    padding: 25px;
+    margin-top: 20px;    
+}
+
+@mixin creator_box_inputs {
+    padding-inline: 30px;
+    width: 25%;
+}
+
+.creator {
+    .creator-global-settings {
+        @include creator_box;
+        
+        .creator-global-settings-title {
+            @include creator_titles;
+        }
+
+        .creator-global-settings-name {
+            padding: 0 45px;
+        }
+
+        .creator-global-settings-input-list {
+            @include creator_box_inputs;
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+
+            .creator-global-settings-input {
+                width:calc(1/4*100%);
+                padding: 15px;
+            }
+        }
+    }
+
+    .loop-list {
+        display: flex;
+        flex-direction: column;
+        
+        .loop-form {            
+            @include creator_box;
+            display: flex;
+            flex-direction: column;
+            
+            .loop-denomination {
+                @include creator_titles;
+            }
+
+            .loop-settings {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                width: 100%;
+                
+                .loop-settings-input {
+                    @include creator_box_inputs;
+                }
+            }
+
+            .loop-exercise-list {
+                @include creator_box;
+
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+
+                .exercise-form {
+                    padding: 15px;
+                    width: calc(1/3*100%);
+                                        
+                    .exercise-form-paper {
+                        padding: 25px;
+                        display: flex;
+                        flex-direction: column;
+                        height: 200px;
+                        justify-content: space-between;
+                        
+                        .type-selector {
+                            // padding-inline: 10px;
+                            padding-bottom: 15px;
+                        }
+
+                        .exercise-timings {
+                            width: 100%;
+                            display: flex;
+                            flex-direction: row;
+                            justify-content: space-between;
+                        }
+
+                        .value-input, .exercise-rest {
+                            width: 47%;
+                        } 
+                    }
+                }
+            }
+        }
+    }
+
+    .end-creation-actions {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        margin: 30px 0;
+        
+        
+        .start-training-btn,
+        .cancel-training-btn,
+        .save-training-btn {
+            width: 200px;
+        }
+    }
+    
+}

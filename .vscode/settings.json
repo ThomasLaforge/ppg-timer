@@ -1,5 +1,11 @@
 {
-    "i18n-ally.localesPaths": [
-        "out/ppg-timer-win32-x64/locales"
-    ]
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
